@@ -1,6 +1,6 @@
 ﻿namespace SampleBackend.Models.Responses;
 
-public class TradeResponse
+public class TradeRequestResponse
 {
     public Guid Id { get; set; }
 
