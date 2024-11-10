@@ -2,7 +2,7 @@
 
 namespace SampleBackend.Models.Requests;
 
-public class TradeRequest
+public class TradeRequestRequest
 {
     public Guid BookId { get; set; }
 
