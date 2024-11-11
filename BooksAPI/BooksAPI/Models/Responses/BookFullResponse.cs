@@ -11,4 +11,6 @@ public class BookFullResponse
     public string Genre { get; set; }
 
     public Guid UserId { get; set; }
+
+    public List<TradeRequestResponse> TradeRequests { get; set; }
 }
