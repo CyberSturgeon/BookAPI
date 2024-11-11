@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BooksAPI.Models.Requests;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SampleBackend.Models.Requests;
 using SampleBackend.Models.Responses;
@@ -58,7 +59,7 @@ public class BooksController : Controller
     }
 
     [HttpPatch("{id}")]
-    public IActionResult UpdateBook([FromRoute] Guid id, [FromBody] UpdateUserRequest request)
+    public IActionResult UpdateBook([FromRoute] Guid id, [FromBody] UpdateBookRequest request)
     {
         return NoContent();
     }
