@@ -1,4 +1,6 @@
-﻿namespace SampleBackend.Models.Responses;
+﻿using BooksAPI.Models.Enums;
+
+namespace SampleBackend.Models.Responses;
 
 public class TradeRequestResponse
 {
@@ -8,6 +10,5 @@ public class TradeRequestResponse
 
     public Guid UserId { get; set; }
 
-    //[DefaultValue(Status.Waiting)]
-    public string TradeStatus { get; set; }
+    public TradeRequestStatus TradeStatus { get; set; }
 }
