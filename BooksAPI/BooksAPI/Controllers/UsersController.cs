@@ -23,9 +23,9 @@ public class UsersController : Controller
     }
 
     [HttpGet("{id}")]
-    public ActionResult<UserWithBooksResponse> GetUserById([FromRoute] Guid id)
+    public ActionResult<UserFullResponse> GetUserById([FromRoute] Guid id)
     {
-        var user = new UserWithBooksResponse();
+        var user = new UserFullResponse();
         return Ok(user);
     }
 

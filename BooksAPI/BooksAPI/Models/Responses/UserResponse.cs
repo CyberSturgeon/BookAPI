@@ -8,7 +8,5 @@ public class UserResponse
 
     public string Email { get; set; }
 
-    public int BooksCount { get; set; }
-
     public int Trades { get; set; }
 }
