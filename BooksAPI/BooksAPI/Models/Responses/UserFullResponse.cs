@@ -1,6 +1,6 @@
 ﻿namespace SampleBackend.Models.Responses;
 
-public class UserWithBooksResponse
+public class UserFullResponse
 {
     public Guid Id { get; set; }
 
@@ -11,4 +11,6 @@ public class UserWithBooksResponse
     public int BooksCount { get; set; }
 
     public List<BookShortResponse> Books { get; set; }
+
+    public List<TradeRequestResponse> TradeRequests { get; set; }
 }
