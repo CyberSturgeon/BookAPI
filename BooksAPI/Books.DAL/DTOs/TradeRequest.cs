@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Books.Core;
 
-namespace Books.Core.DTOs;
+namespace Books.DAL.DTOs;
 
 public class TradeRequest
 {
