@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SampleBackend.Models.Requests;
 using SampleBackend.Models.Responses;
 
@@ -6,9 +7,10 @@ namespace SampleBackend.Controllers;
 
 [ApiController]
 [Route("api/users")]
+[Authorize]
 public class UsersController : Controller
 {
-    [HttpPost]
+    [HttpPost, AllowAnonymous]
     public ActionResult<Guid> Register([FromBody] RegisterUserRequest request)
     {
         var addedUserId = Guid.NewGuid();
@@ -16,20 +18,20 @@ public class UsersController : Controller
     }
 
     // "api/users/login"
-    [HttpPost("login")]
+    [HttpPost("login"), AllowAnonymous]
     public IActionResult LogIn([FromBody] LoginRequest request)
     {
         return Ok();
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}"), AllowAnonymous]
     public ActionResult<UserFullResponse> GetUserById([FromRoute] Guid id)
     {
         var user = new UserFullResponse();
         return Ok(user);
     }
 
-    [HttpGet]
+    [HttpGet, AllowAnonymous]
     public ActionResult<List<UserResponse>> GetUsers()
     {
         return Ok();
