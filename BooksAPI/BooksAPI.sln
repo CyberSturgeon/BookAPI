@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Books.DAL", "Books.DAL\Book
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Books.Core", "Books.Core\Books.Core.csproj", "{856005C0-65A9-4D4D-9615-6D489D38FF85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Book.BLL", "Book.BLL\Book.BLL.csproj", "{F961AB0C-F72A-4A2E-9536-D54E7B98F128}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Books.BLL", "Books.BLL\Books.BLL.csproj", "{F961AB0C-F72A-4A2E-9536-D54E7B98F128}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
