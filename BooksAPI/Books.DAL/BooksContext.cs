@@ -48,6 +48,10 @@ public class BooksContext: DbContext
         #region Columns
 
         modelBuilder.Entity<User>()
+            .HasIndex(u => u.Email)
+            .IsUnique();
+
+        modelBuilder.Entity<User>()
             .Property(u => u.Email)
             .IsRequired()
             .HasMaxLength(50);
