@@ -6,5 +6,7 @@ public class TradeRequestRequest
 {
     public Guid BookId { get; set; }
 
-    public Guid UserId { get; set; }
+    public Guid OwnerId { get; set; }
+
+    public Guid BuyerId { get; set; }
 }
