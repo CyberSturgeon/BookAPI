@@ -1,10 +1,10 @@
-﻿using Books.DAL.DTOs;
+﻿using Books.BLL.Models;
 
 namespace Books.BLL.Services.Interfaces;
 
 public interface IUsersService
 {
-    public User VerifyUser(string email, string password);
+    public UserModel VerifyUser(string email, string password);
 
-    public string? LogIn(User user);
+    public string? LogIn(UserModel user);
 }

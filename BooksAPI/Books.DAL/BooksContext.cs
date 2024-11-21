@@ -12,6 +12,12 @@ public class BooksContext: DbContext
 
     public DbSet<TradeRequest> TradeRequest { get; set; }
 
+    public BooksContext()
+    {
+        Database.EnsureDeleted();
+        Database.EnsureCreated();
+    }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         string connectionString = Options.ConnectionString;
@@ -20,6 +26,8 @@ public class BooksContext: DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        #region RelationShips
+
         modelBuilder.Entity<User>()
         .HasMany(u => u.Books)
         .WithMany(b => b.Users);
@@ -28,12 +36,42 @@ public class BooksContext: DbContext
         .HasMany(u => u.Trades)
         .WithOne(t => t.Buyer);
 
-        modelBuilder.Entity<User>()
-        .HasMany(u => u.Trades)
-        .WithOne(t => t.Owner);
+        modelBuilder.Entity<TradeRequest>()
+        .HasOne(t => t.Owner);
 
         modelBuilder.Entity<Book>()
         .HasMany(b => b.TradeRequests)
         .WithOne(t => t.Book);
+
+        #endregion
+
+        #region Columns
+
+        modelBuilder.Entity<User>()
+            .Property(u => u.Email)
+            .IsRequired()
+            .HasMaxLength(50);
+
+        modelBuilder.Entity<User>()
+            .Property(u => u.Name)
+            .HasMaxLength(15);
+
+        modelBuilder.Entity<Book>()
+            .Property(u => u.Name)
+            .HasMaxLength(40);
+
+        modelBuilder.Entity<Book>()
+            .Property(u => u.Author)
+            .HasMaxLength(40);
+
+        modelBuilder.Entity<Book>()
+            .Property(u => u.Genre)
+            .HasMaxLength(40);
+
+        modelBuilder.Entity<TradeRequest>()
+            .Property(u => u.TradeStatus)
+            .HasMaxLength(40);
+
+        #endregion
     }
 }

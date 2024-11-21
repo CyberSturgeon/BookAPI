@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Identity.Data;
-using System.ComponentModel.DataAnnotations;
 
 namespace BooksAPI.Models.Requests.Validation;
 
