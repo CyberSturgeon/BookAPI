@@ -7,7 +7,7 @@ public class Options
     {
         get
         {
-            return Environment.GetEnvironmentVariable("BooksDB");
+            return "Host=localhost;Port=5432;Database=Books;Username=postgres;Password=postgres;";
         }
     }
 
@@ -15,7 +15,7 @@ public class Options
     {
         get
         {
-            return Environment.GetEnvironmentVariable("BooksIssuer");
+            return "KolyaService";
         }
     }
 
@@ -23,7 +23,7 @@ public class Options
     {
         get
         {
-            return Environment.GetEnvironmentVariable("BooksAudience");
+            return "KolyaServiceUsers";
         }
     }
 
@@ -31,7 +31,7 @@ public class Options
     {
         get
         {
-            return Environment.GetEnvironmentVariable("BooksKey");
+            return "abobaLupaPupa@abobaLupaPupa@abobaLupaPupa@";
         }
     }
 }
