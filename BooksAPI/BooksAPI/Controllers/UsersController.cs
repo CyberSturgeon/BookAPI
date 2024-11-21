@@ -1,7 +1,15 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using BooksAPI.Models.Responses;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using SampleBackend.Models.Requests;
 using SampleBackend.Models.Responses;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Books.BLL.Servicies;
+using Books.Core;
 
 namespace SampleBackend.Controllers;
 
@@ -10,6 +18,13 @@ namespace SampleBackend.Controllers;
 [Authorize]
 public class UsersController : Controller
 {
+    private IUsersService _manager;
+
+    public UsersController()
+    {
+        _manager = new UsersService();
+    }
+
     [HttpPost, AllowAnonymous]
     public ActionResult<Guid> Register([FromBody] RegisterUserRequest request)
     {
@@ -21,7 +36,31 @@ public class UsersController : Controller
     [HttpPost("login"), AllowAnonymous]
     public IActionResult LogIn([FromBody] LoginRequest request)
     {
-        return Ok();
+        if (request is null)
+        {
+            return BadRequest("The login request is bad.");
+        }
+
+        var user = _manager.VerifyUser(request.Email, request.Password);
+
+        if (user != null)
+        {
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Options.Key));
+            var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+            var tokenOptions = new JwtSecurityToken(
+                issuer: Options.Issuer,
+                audience: Options.Audience,
+                claims: new List<Claim>(),
+                expires: DateTime.Now.AddMinutes(60),
+                signingCredentials: signinCredentials
+            );
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+            return Ok(new AuthenticatedResponse { Token = tokenString });
+        }
+        else
+        {
+            return Unauthorized();
+        }
     }
 
     [HttpGet("{id}"), AllowAnonymous]
