@@ -10,6 +10,7 @@ using System.Security.Claims;
 using System.Text;
 using Books.BLL.Servicies;
 using Books.Core;
+using Books.BLL.Services.Interfaces;
 
 namespace SampleBackend.Controllers;
 
@@ -42,26 +43,32 @@ public class UsersController : Controller
         }
 
         var user = _manager.VerifyUser(request.Email, request.Password);
+        var token = _manager.LogIn(user);
 
-        if (user != null)
+        if (token != null)
         {
-            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Options.Key));
-            var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-            var tokenOptions = new JwtSecurityToken(
-                issuer: Options.Issuer,
-                audience: Options.Audience,
-                claims: new List<Claim>(),
-                expires: DateTime.Now.AddMinutes(60),
-                signingCredentials: signinCredentials
-            );
-            var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-            return Ok(new AuthenticatedResponse { Token = tokenString });
+            return Ok(new AuthenticatedResponse { Token = token });
         }
         else
         {
             return Unauthorized();
         }
     }
+
+    [HttpGet("{id}/trades")]
+    public ActionResult<List<TradeRequestResponse>> GetTradeRequestsByUserId([FromRoute] Guid id)
+    {
+        var tradeRequests = new List<TradeRequestResponse>();
+        return Ok(tradeRequests);
+    }
+
+    [HttpGet("{id}/books"), AllowAnonymous]
+    public ActionResult<List<BookShortResponse>> GetBooksByUserId([FromRoute] Guid userId)
+    {
+        var books = new List<BookShortResponse>();//filter by user id
+        return Ok(books);
+    }
+
 
     [HttpGet("{id}"), AllowAnonymous]
     public ActionResult<UserFullResponse> GetUserById([FromRoute] Guid id)

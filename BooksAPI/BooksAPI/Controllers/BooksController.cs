@@ -33,11 +33,17 @@ public class BooksController : Controller
         return Ok(books);
     }
 
-    [HttpGet("owned-{userId}"), AllowAnonymous]
-    public ActionResult<List<BookShortResponse>> GetBooksByUserId([FromRoute] Guid userId)
+    [HttpGet("{id}/trades")]
+    public ActionResult<List<TradeRequestResponse>> GetTradeRequestsByBookId([FromRoute] Guid id)
     {
-        var books = new List<BookShortResponse>();//filter by user id
-        return Ok(books);
+        var tradeRequests = new List<TradeRequestResponse>();
+        return Ok(tradeRequests);
+    }
+
+    [HttpDelete("{id}/trades")]
+    public IActionResult DeactivateRequest([FromRoute] Guid id)
+    {
+        return NoContent();
     }
 
     [HttpGet, AllowAnonymous]

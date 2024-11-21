@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Books.DAL.DTOs;
 
 public class Book
@@ -16,7 +11,7 @@ public class Book
 
     public string Genre { get; set; }
 
-    public IEnumerable<TradeRequest>? TradeRequests { get; set; }
+    public ICollection<TradeRequest>? TradeRequests { get; set; }
 
-    public IEnumerable<User>? Users { get; set; }
+    public ICollection<User>? Users { get; set; }
 }

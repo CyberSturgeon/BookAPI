@@ -23,28 +23,8 @@ public class TradeRequestsController : Controller
         return Ok(tradeRequest);
     }
 
-    [HttpGet("search-user-{id}")]
-    public ActionResult<List<TradeRequestResponse>> GetTradeRequestsByUserId([FromRoute] Guid id)
-    {
-        var tradeRequests = new List<TradeRequestResponse>();
-        return Ok(tradeRequests);
-    }
-
-    [HttpGet("search-book-{id}")]
-    public ActionResult<List<TradeRequestResponse>> GetTradeRequestsByBookId([FromRoute] Guid id)
-    {
-        var tradeRequests = new List<TradeRequestResponse>();
-        return Ok(tradeRequests);
-    }
-
     [HttpPatch("{id}")]
     public IActionResult UpdateTradeRequest([FromRoute] Guid id, [FromBody] string status)
-    {
-        return NoContent();
-    }
-    //BooksController POST
-    [HttpPatch("deactivate-book-{id}")]
-    public IActionResult DeactivateRequest([FromRoute] Guid id)
     {
         return NoContent();
     }
