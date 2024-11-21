@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SampleBackend.Models.Requests;
 using SampleBackend.Models.Responses;
 
 namespace BooksAPI.Controllers;
 [ApiController]
 [Route("api/trade-requests")]
+[Authorize]
 public class TradeRequestsController : Controller
 {
     [HttpPost]

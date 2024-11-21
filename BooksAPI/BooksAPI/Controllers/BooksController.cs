@@ -1,10 +1,13 @@
 ﻿using BooksAPI.Models.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SampleBackend.Models.Requests;
 using SampleBackend.Models.Responses;
 
 namespace BooksAPI.Controllers;
+
+[Authorize]
 [ApiController]
 [Route("api/books")]
 public class BooksController : Controller
@@ -16,28 +19,28 @@ public class BooksController : Controller
         return Ok(addedBookId);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}"), AllowAnonymous]
     public ActionResult<BookFullResponse> GetBookById([FromRoute] Guid id)
     {
         var book = new BookFullResponse();//filter by book id
         return Ok(book);
     }
 
-    [HttpPost("search")]
+    [HttpPost("search"), AllowAnonymous]
     public ActionResult<List<BookShortResponse>> SearchBooks([FromBody] SearchBookRequest request)
     {
         var books = new List<BookShortResponse>();
         return Ok(books);
     }
 
-    [HttpGet("owned-{userId}")]
+    [HttpGet("owned-{userId}"), AllowAnonymous]
     public ActionResult<List<BookShortResponse>> GetBooksByUserId([FromRoute] Guid userId)
     {
         var books = new List<BookShortResponse>();//filter by user id
         return Ok(books);
     }
 
-    [HttpGet]
+    [HttpGet, AllowAnonymous]
     public ActionResult<List<BookShortResponse>> GetBooks()
     {
         var books = new List<BookShortResponse>();//no filtering
