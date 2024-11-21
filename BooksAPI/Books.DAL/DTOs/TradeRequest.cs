@@ -6,9 +6,11 @@ public class TradeRequest
 {
     public Guid Id { get; set; }
 
-    public Guid BookId { get; set; }
+    public Book Book { get; set; }
 
-    public Guid UserId { get; set; }
+    public User Owner { get; set; }
+
+    public User Buyer { get; set; } 
 
     public TradeRequestStatus TradeStatus { get; set; }
 }

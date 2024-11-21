@@ -23,28 +23,14 @@ public class BooksController : Controller
         return Ok(book);
     }
 
-    [HttpGet("search-genre-{genre}")]
-    public ActionResult<List<BookShortResponse>> GetBooksByGenre([FromRoute] string genre)
+    [HttpPost("search")]
+    public ActionResult<List<BookShortResponse>> SearchBooks([FromBody] SearchBookRequest request)
     {
-        var books = new List<BookShortResponse>();//filter by book genre
+        var books = new List<BookShortResponse>();
         return Ok(books);
     }
 
-    [HttpGet("search-name-{name}")]
-    public ActionResult<List<BookShortResponse>> GetBooksByName([FromRoute] string name)
-    {
-        var books = new List<BookShortResponse>();//filter by book genre
-        return Ok(books);
-    }
-
-    [HttpGet("search-author-{author}")]
-    public ActionResult<List<BookShortResponse>> GetBooksByAuthor([FromRoute] string author)
-    {
-        var books = new List<BookShortResponse>();//filter by book author
-        return Ok(books);
-    }
-
-    [HttpGet("search-user-{userId}")]
+    [HttpGet("owned-{userId}")]
     public ActionResult<List<BookShortResponse>> GetBooksByUserId([FromRoute] Guid userId)
     {
         var books = new List<BookShortResponse>();//filter by user id

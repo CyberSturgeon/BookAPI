@@ -1,3 +1,4 @@
+using BooksAPI.Models.Requests.Validation;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 
@@ -12,6 +13,7 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddFluentValidationAutoValidation();
+        builder.Services.AddValidatorsFromAssemblyContaining<CreateBookRequestValidator>();
 
         var app = builder.Build();
 

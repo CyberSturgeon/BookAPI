@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Books.Core.DTOs;
+namespace Books.DAL.DTOs;
 
 public class Book
 {
@@ -16,7 +16,7 @@ public class Book
 
     public string Genre { get; set; }
 
-    public Guid UserId { get; set; }
+    public IEnumerable<TradeRequest>? TradeRequests { get; set; }
 
-    public List<TradeRequest>? TradeRequests { get; set; }
+    public IEnumerable<User>? Users { get; set; }
 }
