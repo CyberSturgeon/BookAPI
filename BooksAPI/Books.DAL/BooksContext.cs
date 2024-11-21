@@ -26,8 +26,11 @@ public class BooksContext: DbContext
 
         modelBuilder.Entity<User>()
         .HasMany(u => u.Trades)
-        //.WithOne(t => t.Owner)
         .WithOne(t => t.Buyer);
+
+        modelBuilder.Entity<User>()
+        .HasMany(u => u.Trades)
+        .WithOne(t => t.Owner);
 
         modelBuilder.Entity<Book>()
         .HasMany(b => b.TradeRequests)
