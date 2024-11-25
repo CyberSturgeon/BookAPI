@@ -1,16 +1,10 @@
-﻿using BooksAPI.Models.Responses;
+﻿using Books.BLL.Services;
+using Books.BLL.Services.Interfaces;
+using BooksAPI.Models.Responses;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using SampleBackend.Models.Requests;
 using SampleBackend.Models.Responses;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Books.BLL.Services;
-using Books.Core;
-using Books.BLL.Services.Interfaces;
 
 namespace SampleBackend.Controllers;
 

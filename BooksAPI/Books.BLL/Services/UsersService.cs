@@ -1,15 +1,14 @@
-﻿using Books.DAL.Repositories;
-using Books.DAL.DTOs;
+﻿using AutoMapper;
+using Books.BLL.Mappings;
+using Books.BLL.Models;
+using Books.BLL.Services.Interfaces;
+using Books.Core;
+using Books.DAL.Repositories;
+using Books.DAL.Repositories.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Books.Core;
-using Books.BLL.Services.Interfaces;
-using Books.DAL.Repositories.Interfaces;
-using Books.BLL.Models;
-using AutoMapper;
-using Books.BLL.Mappings;
 
 namespace Books.BLL.Services;
 
