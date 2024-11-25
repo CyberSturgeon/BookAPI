@@ -3,13 +3,7 @@ namespace Books.Core;
 
 public class Options
 {
-    public static string ConnectionString
-    {
-        get
-        {
-            return "Host=localhost;Port=5432;Database=Books;Username=postgres;Password=postgres;";
-        }
-    }
+    public const string ConnectionString = "Host=localhost;Port=5432;Database=Books;Username=postgres;Password=postgres;";
 
     public static string Issuer
     {

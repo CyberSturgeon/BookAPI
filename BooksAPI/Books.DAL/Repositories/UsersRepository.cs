@@ -15,27 +15,27 @@ public class UsersRepository : IUsersRepository
 
     public User? VerifyUser(string email, string password)
     {
-        return _context.User.Where(u => u.Email == email && u.Password == password).FirstOrDefault();
+        return _context.Users.Where(u => u.Email == email && u.Password == password).FirstOrDefault();
     }
 
     public User? GetUserByEmail(string email)
     {
-        return _context.User.Where(u => u.Email == email).FirstOrDefault();
+        return _context.Users.Where(u => u.Email == email).FirstOrDefault();
     }
 
     public User? GetUserById(Guid id)
     {
-        return _context.User.Where(u => u.Id == id).FirstOrDefault();
+        return _context.Users.Where(u => u.Id == id).FirstOrDefault();
     }
 
     public ICollection<User>? GetUsers(Guid id)
     {
-        return _context.User.ToList();
+        return _context.Users.ToList();
     }
 
     public void DeleteUserById(User user)
     {
-        _context.User.Remove(user);
+        _context.Users.Remove(user);
         _context.SaveChanges();
     }
 
@@ -54,7 +54,7 @@ public class UsersRepository : IUsersRepository
 
     public Guid AddUser(User user)
     {
-        _context.User.Add(user);
+        _context.Users.Add(user);
         _context.SaveChanges();
 
         return user.Id;

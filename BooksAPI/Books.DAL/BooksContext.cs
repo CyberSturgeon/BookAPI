@@ -1,21 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Books.DAL.DTOs;
 using Books.Core;
+using Books.DAL.Configurations;
 
 namespace Books.DAL;
 
 public class BooksContext: DbContext
 {
-    public DbSet<User> User { get; set; }
+    public DbSet<User> Users { get; set; }
 
-    public DbSet<Book> Book { get; set; }
+    public DbSet<Book> Books { get; set; }
 
-    public DbSet<TradeRequest> TradeRequest { get; set; }
+    public DbSet<TradeRequest> TradeRequests { get; set; }
 
     public BooksContext()
     {
-        Database.EnsureDeleted();
-        Database.EnsureCreated();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -26,56 +25,8 @@ public class BooksContext: DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        #region RelationShips
-
-        modelBuilder.Entity<User>()
-        .HasMany(u => u.Books)
-        .WithMany(b => b.Users);
-
-        modelBuilder.Entity<User>()
-        .HasMany(u => u.Trades)
-        .WithOne(t => t.Buyer);
-
-        modelBuilder.Entity<TradeRequest>()
-        .HasOne(t => t.Owner);
-
-        modelBuilder.Entity<Book>()
-        .HasMany(b => b.TradeRequests)
-        .WithOne(t => t.Book);
-
-        #endregion
-
-        #region Columns
-
-        modelBuilder.Entity<User>()
-            .HasIndex(u => u.Email)
-            .IsUnique();
-
-        modelBuilder.Entity<User>()
-            .Property(u => u.Email)
-            .IsRequired()
-            .HasMaxLength(50);
-
-        modelBuilder.Entity<User>()
-            .Property(u => u.Name)
-            .HasMaxLength(15);
-
-        modelBuilder.Entity<Book>()
-            .Property(u => u.Name)
-            .HasMaxLength(40);
-
-        modelBuilder.Entity<Book>()
-            .Property(u => u.Author)
-            .HasMaxLength(40);
-
-        modelBuilder.Entity<Book>()
-            .Property(u => u.Genre)
-            .HasMaxLength(40);
-
-        modelBuilder.Entity<TradeRequest>()
-            .Property(u => u.TradeStatus)
-            .HasMaxLength(40);
-
-        #endregion
+        modelBuilder.AddBookEntityConfiguration();
+        modelBuilder.AddUserEntityConfiguration();
+        modelBuilder.AddTradeRequestEntityConfiguration();
     }
 }
