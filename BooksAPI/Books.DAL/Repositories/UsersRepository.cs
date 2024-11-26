@@ -28,12 +28,12 @@ public class UsersRepository : IUsersRepository
         return _context.Users.Where(u => u.Id == id).FirstOrDefault();
     }
 
-    public ICollection<User>? GetUsers(Guid id)
+    public ICollection<User>? GetUsers()
     {
         return _context.Users.ToList();
     }
 
-    public void DeleteUserById(User user)
+    public void DeleteUser(User user)
     {
         _context.Users.Remove(user);
         _context.SaveChanges();
@@ -45,10 +45,18 @@ public class UsersRepository : IUsersRepository
 
         userToUpdate.Name = user.Name;
         userToUpdate.Email = user.Email;
-        userToUpdate.Password = user.Password;
         userToUpdate.Trades = user.Trades;
         userToUpdate.Books = user.Books;
         
+        _context.SaveChanges();
+    }
+
+    public void UpdateUserPassword(Guid id, string password)
+    {
+        var userToUpdate = GetUserById(id);
+
+        userToUpdate.Password = password;
+
         _context.SaveChanges();
     }
 
