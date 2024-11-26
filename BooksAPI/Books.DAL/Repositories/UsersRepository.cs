@@ -1,6 +1,5 @@
 ﻿using Books.DAL.DTOs;
 using Books.DAL.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace Books.DAL.Repositories;
 

@@ -1,8 +1,7 @@
 ﻿
 using Books.DAL.DTOs;
-using Books.DAL.Interfaces;
 
-namespace Books.DAL.Repositories;
+namespace Books.DAL.Repositories.Interfaces;
 
 public class BooksRepository : IBooksRepository
 {

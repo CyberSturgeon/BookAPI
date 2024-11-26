@@ -10,11 +10,11 @@ public interface IUsersRepository
 
     public User? GetUserById(Guid id);
 
-    public ICollection<User>? GetUsers(Guid id);
+    public ICollection<User>? GetUsers();
 
-    public void DeleteUserById(User user);
+    public void DeleteUser(User user);
 
     public void UpdateUser(User user);
 
-    public Guid AddUser(User user)
+    public Guid AddUser(User user);
 }

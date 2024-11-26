@@ -1,6 +1,6 @@
 ﻿using Books.DAL.DTOs;
 
-namespace Books.DAL.Interfaces
+namespace Books.DAL.Repositories.Interfaces
 {
     public interface IBooksRepository
     {
