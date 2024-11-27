@@ -1,14 +1,16 @@
-﻿
-using Books.DAL.DTOs;
-
+﻿using Books.DAL.DTOs;
 namespace Books.DAL.Repositories.Interfaces;
 
 public class BooksRepository : IBooksRepository
 {
     private BooksContext _context;
+    
+    private readonly IUsersRepository _usersRepository;
 
     public BooksRepository()
     {
+        _usersRepository = new UsersRepository();
+
         _context = new BooksContext();
     }
 
@@ -22,19 +24,23 @@ public class BooksRepository : IBooksRepository
         return _context.Books.ToList();
     }
 
+    public ICollection<Book>? GetBooksByFilter(BooksFilter filter)
+    {
+
+        return _context.Books.Where(b => b.Name == filter.Name && b.Author == filter.Author && b.Genre == filter.Genre).ToList();
+    }
+
     public void DeleteBook(Book book)
     {
         _context.Books.Remove(book);
         _context.SaveChanges();
     }
 
-    public void UpdateBook(Book book)
+    public void UpdateBook(Book book, Book newBook)
     {
-        var bookToUpdate = GetBookById(book.Id);
-
-        bookToUpdate.Name = book.Name;
-        bookToUpdate.Author = book.Author;
-        bookToUpdate.Genre = book.Genre;
+        book.Name = newBook.Name;
+        book.Author = newBook.Author;
+        book.Genre = newBook.Genre;
 
         _context.SaveChanges();
     }
@@ -47,26 +53,16 @@ public class BooksRepository : IBooksRepository
         return book.Id;
     }
 
-    public void TradeBook(Guid bookId, User owner, TradeRequest trade)
+    public void AddUserToBook(Book book, User owner)
     {
-        AddOwnerToBook(bookId, owner);
-        AddTradeToBook(bookId, trade);
-    }
-
-    public void AddOwnerToBook(Guid bookId, User owner)
-    {
-        var bookToUpdate = GetBookById(bookId);
-
-        bookToUpdate.Users.Add(owner);
+        book.Users.Add(owner);
 
         _context.SaveChanges();
     }
 
-    public void AddTradeToBook(Guid bookId, TradeRequest trade)
+    public void AddTradeToBook(Book book, TradeRequest trade)
     {
-        var bookToUpdate = GetBookById(bookId);
-
-        bookToUpdate.TradeRequests.Add(trade);
+        book.TradeRequests.Add(trade);
 
         _context.SaveChanges();
     }

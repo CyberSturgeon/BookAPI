@@ -38,23 +38,26 @@ public class UsersRepository : IUsersRepository
         _context.SaveChanges();
     }
 
-    public void UpdateUser(User user)
+    public void UpdateUser(User user, User newUser)
     {
-        var userToUpdate = GetUserById(user.Id);
-
-        userToUpdate.Name = user.Name;
-        userToUpdate.Email = user.Email;
-        userToUpdate.Trades = user.Trades;
-        userToUpdate.Books = user.Books;
+        user.Name = newUser.Name;
+        user.Email = newUser.Email;
+        user.Trades = newUser.Trades;
+        user.Books = newUser.Books;
         
         _context.SaveChanges();
     }
 
-    public void UpdateUserPassword(Guid id, string password)
+    public void AddBookToUser(Book book, User owner)
     {
-        var userToUpdate = GetUserById(id);
+        owner.Books.Add(book);
 
-        userToUpdate.Password = password;
+        _context.SaveChanges();
+    }
+
+    public void UpdateUserPassword(User user, string password)
+    {
+        user.Password = password;
 
         _context.SaveChanges();
     }
