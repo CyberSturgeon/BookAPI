@@ -97,9 +97,9 @@ public class UsersService : IUsersService
         _repository.UpdateUser(user, newUserDTO);
     }
 
-    public void AddUser(UserModel user)
+    public Guid AddUser(RegisterUserModel user)
     {
-        var existsUser = GetUserByEmail(user.Email);
+        var existsUser = _repository.GetUserByEmail(user.Email);
 
         if (existsUser != null)
         {
@@ -110,6 +110,7 @@ public class UsersService : IUsersService
             throw new EntityInvalidDataException($"Data to create user {user.Email} is invalid");
         //userDto.Password = HashCode it
 
-        _repository.AddUser(userDto);
+        var id = _repository.AddUser(userDto);
+        return id;
     }
 }

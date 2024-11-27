@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SampleBackend.Models.Requests;
-using SampleBackend.Models.Responses;
+using BooksAPI.Models.Requests;
+using BooksAPI.Models.Responses;
 
 namespace BooksAPI.Controllers;
 

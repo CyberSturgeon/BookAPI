@@ -1,4 +1,4 @@
-﻿namespace SampleBackend.Models.Responses;
+﻿namespace BooksAPI.Models.Responses;
 
 public class BookFullResponse
 {

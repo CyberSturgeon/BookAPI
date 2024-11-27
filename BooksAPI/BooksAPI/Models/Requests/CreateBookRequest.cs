@@ -1,4 +1,4 @@
-﻿namespace SampleBackend.Models.Requests;
+﻿namespace BooksAPI.Models.Requests;
 
 public class CreateBookRequest
 {
