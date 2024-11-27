@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Books.BLL.Exceptions;
 using Books.BLL.Mappings;
 using Books.BLL.Models;
 using Books.BLL.Services.Interfaces;
@@ -30,12 +31,13 @@ public class UsersService : IUsersService
         _mapper = new Mapper(config);
     }
 
-    public UserModel? VerifyUser(string email, string password)
+    public string VerifyUser(string email, string password)
     {
-        return _mapper.Map<UserModel>(_repository.VerifyUser(email, password));
+        return LogIn(_mapper.Map<UserModel>(_repository.VerifyUser(email, password))) ??
+            throw new WrongLoginException($"Wrong Email or password, try again");
     }
 
-    public string? LogIn(UserModel user)
+    private string? LogIn(UserModel user)
     {
         if (user != null)
         {
@@ -44,7 +46,7 @@ public class UsersService : IUsersService
             var tokenOptions = new JwtSecurityToken(
                 issuer: Options.Issuer,
                 audience: Options.Audience,
-                claims: new List<Claim>(){ new Claim("string", user.Id.ToString()), new Claim("string", user.Name) },
+                claims: new List<Claim>() { new Claim("string", user.Id.ToString()), new Claim("string", user.Name) },
                 expires: DateTime.Now.AddMinutes(60),
                 signingCredentials: signinCredentials
             );
@@ -55,10 +57,18 @@ public class UsersService : IUsersService
         {
             return null;
         }
+        
     }
 
-    public UserModel? GetUserByEmail(string email)
+    public UserModel GetUserByEmail(string email)
     {
-        return _mapper.Map<UserModel>(_repository.GetUserByEmail(email));
+        return _mapper.Map<UserModel>(_repository.GetUserByEmail(email)) ??
+            throw new EntityNotFoundException("User not found");
+    }
+
+    public UserModel GetUserById(Guid id)
+    {
+        return _mapper.Map<UserModel>(_repository.GetUserById(id)) ??
+            throw new EntityNotFoundException("User not found");
     }
 }

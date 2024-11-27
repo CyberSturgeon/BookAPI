@@ -27,7 +27,9 @@ public class BooksRepository : IBooksRepository
     public ICollection<Book>? GetBooksByFilter(BooksFilter filter)
     {
 
-        return _context.Books.Where(b => b.Name == filter.Name && b.Author == filter.Author && b.Genre == filter.Genre).ToList();
+        return _context.Books.Where(b => string.IsNullOrEmpty(filter.Name) || b.Name == filter.Name &&
+            string.IsNullOrEmpty(filter.Author) || b.Author == filter.Author &&
+            string.IsNullOrEmpty(filter.Genre) || b.Genre == filter.Genre).ToList();
     }
 
     public void DeleteBook(Book book)

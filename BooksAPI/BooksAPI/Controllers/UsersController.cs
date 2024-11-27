@@ -36,17 +36,9 @@ public class UsersController : Controller
             return BadRequest("The login request is bad.");
         }
 
-        var user = _manager.VerifyUser(request.Email, request.Password);
-        var token = _manager.LogIn(user);
+        var token = _manager.VerifyUser(request.Email, request.Password);
 
-        if (token != null)
-        {
-            return Ok(new AuthenticatedResponse { Token = token });
-        }
-        else
-        {
-            return Unauthorized();
-        }
+        return Ok(new AuthenticatedResponse { Token = token });
     }
 
     [HttpGet("{id}/trades")]
