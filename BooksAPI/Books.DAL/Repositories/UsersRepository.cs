@@ -15,7 +15,8 @@ public class UsersRepository : IUsersRepository
 
     public User? VerifyUser(string email, string password)
     {
-        return _context.Users.Where(u => u.Email == email && u.Password == password).FirstOrDefault();
+        return _context.Users
+            .Where(u => u.Email == email && u.Password == password).FirstOrDefault();
     }
 
     public User? GetUserByEmail(string email)
@@ -30,7 +31,9 @@ public class UsersRepository : IUsersRepository
 
     public User? GetUserFullProfileById(Guid id)
     {
-        return _context.Users.Where(u => u.Id == id).Include(u => u.Books).ThenInclude(b => b.TradeRequests).Include(u => u.Trades).FirstOrDefault();
+        return _context.Users.Where(u => u.Id == id)
+            .Include(u => u.Books).ThenInclude(b => b.TradeRequests)
+            .Include(u => u.Trades).FirstOrDefault();
     }
 
     public ICollection<User>? GetUsers()

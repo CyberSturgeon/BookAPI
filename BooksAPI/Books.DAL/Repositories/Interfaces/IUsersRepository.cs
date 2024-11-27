@@ -19,4 +19,6 @@ public interface IUsersRepository
     public void UpdateUser(User user, User newUser);
 
     public Guid AddUser(User user);
+
+    public User? GetUserFullProfileById(Guid id);
 }

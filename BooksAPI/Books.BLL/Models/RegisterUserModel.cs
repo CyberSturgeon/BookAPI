@@ -1,10 +1,8 @@
 ﻿
 namespace Books.BLL.Models;
 
-public class UserModel
+public class RegisterUserModel
 {
-    public Guid Id { get; set; }
-
     public string Name { get; set; }
 
     public string Email { get; set; }
