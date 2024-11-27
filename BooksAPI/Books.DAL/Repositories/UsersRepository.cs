@@ -1,5 +1,6 @@
 ﻿using Books.DAL.DTOs;
 using Books.DAL.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Books.DAL.Repositories;
 
@@ -25,6 +26,11 @@ public class UsersRepository : IUsersRepository
     public User? GetUserById(Guid id)
     {
         return _context.Users.Where(u => u.Id == id).FirstOrDefault();
+    }
+
+    public User? GetUserFullProfileById(Guid id)
+    {
+        return _context.Users.Where(u => u.Id == id).Include(u => u.Books).ThenInclude(b => b.TradeRequests).Include(u => u.Trades).FirstOrDefault();
     }
 
     public ICollection<User>? GetUsers()
