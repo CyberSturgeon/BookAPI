@@ -1,4 +1,5 @@
 ﻿using Books.DAL.DTOs;
+using Microsoft.EntityFrameworkCore;
 namespace Books.DAL.Repositories.Interfaces;
 
 public class BooksRepository : IBooksRepository
@@ -17,6 +18,13 @@ public class BooksRepository : IBooksRepository
     public Book? GetBookById(Guid id)
     {
         return _context.Books.Where(b => b.Id == id).FirstOrDefault();
+    }
+
+    public Book? GetBookFullProfileById(Guid id)
+    {
+        return _context.Books.Where(b => b.Id == id)
+            .Include(b => b.Users)
+            .Include(b => b.TradeRequests).FirstOrDefault();
     }
 
     public ICollection<Book>? GetBooks()

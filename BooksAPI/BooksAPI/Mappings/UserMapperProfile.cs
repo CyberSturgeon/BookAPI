@@ -10,7 +10,7 @@ public class UserMapperProfile:Profile
 {
     public UserMapperProfile()
     {
-        CreateMap<RegisterUserRequest, RegisterUserModel>();
+        CreateMap<RegisterUserRequest, CreateUserModel>();
         CreateMap<UpdateUserRequest, UpdateUserModel>();    
         CreateMap<UserModel, UserResponse>();
         CreateMap<UserFullModel, UserFullResponse>();   

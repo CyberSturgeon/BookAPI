@@ -32,7 +32,7 @@ public class UsersRepository : IUsersRepository
     public User? GetUserFullProfileById(Guid id)
     {
         return _context.Users.Where(u => u.Id == id)
-            .Include(u => u.Books).ThenInclude(b => b.TradeRequests)
+            .Include(u => u.Books)
             .Include(u => u.Trades).FirstOrDefault();
     }
 

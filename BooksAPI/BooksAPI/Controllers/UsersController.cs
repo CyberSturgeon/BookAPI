@@ -34,7 +34,7 @@ public class UsersController : Controller
     [HttpPost, AllowAnonymous]
     public ActionResult<Guid> Register([FromBody] RegisterUserRequest request)
     {
-        var userToCreate = _mapper.Map<RegisterUserModel>(request);
+        var userToCreate = _mapper.Map<CreateUserModel>(request);
         var addedUserId = _service.AddUser(userToCreate);
 
         return Ok(addedUserId);

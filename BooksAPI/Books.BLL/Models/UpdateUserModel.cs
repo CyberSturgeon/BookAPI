@@ -9,7 +9,7 @@ public class UpdateUserModel
 
     public string Email { get; set; }
 
-    public ICollection<Book>? Books { get; set; }
+    public ICollection<BookModel>? Books { get; set; }
 
     public ICollection<TradeRequest> Trades { get; set; }
 }
