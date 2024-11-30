@@ -28,6 +28,7 @@ public class BooksService : IBooksService
                 {
                     cfg.AddProfile(new UserMapperProfile());
                     cfg.AddProfile(new BookMapperProfile());
+                    cfg.AddProfile(new TradeMapperProfile());
                 });
         _mapper = new Mapper(config);
     }
@@ -49,7 +50,7 @@ public class BooksService : IBooksService
     public BookFullModel GetBookById(Guid id)
     {
         return _mapper.Map<BookFullModel>(_booksRepository.GetBookFullProfileById(id)) ??
-            throw new EntityNotFoundException($"Book {id} not found"); ;
+            throw new EntityNotFoundException($"Book {id} not found"); 
     }
 
     public ICollection<BookModel> GetAllBooks()
