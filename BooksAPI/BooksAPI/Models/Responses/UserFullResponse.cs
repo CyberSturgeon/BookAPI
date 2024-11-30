@@ -8,7 +8,7 @@ public class UserFullResponse
 
     public string Email { get; set; }
 
-    public List<BookShortResponse> Books { get; set; }
+    public ICollection<BookShortResponse> Books { get; set; }
 
-    public List<TradeRequestResponse> TradeRequests { get; set; }
+    public ICollection<TradeRequestResponse> TradeRequests { get; set; }
 }

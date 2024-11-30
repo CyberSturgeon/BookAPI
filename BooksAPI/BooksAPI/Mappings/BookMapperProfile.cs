@@ -9,10 +9,11 @@ public class BookMapperProfile : Profile
 {
     public BookMapperProfile()
     {
-        CreateMap<CreateBookRequest, CreateBookRequest>();
+        CreateMap<CreateBookRequest, CreateBookModel>();
         CreateMap<UpdateBookRequest, UpdateBookModel>();
         CreateMap<BookModel, BookShortResponse>();
-        CreateMap<BookFullModel, BookFullResponse>();
+        CreateMap<BookFullModel, BookFullResponse>()
+            .ForMember(bfr => bfr.Owner, opt => opt.MapFrom(bfm => bfm.Users.LastOrDefault()));
         CreateMap<SearchBookRequest, BookFilterModel>();
     }
 }

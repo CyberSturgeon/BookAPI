@@ -55,8 +55,11 @@ public class BooksRepository : IBooksRepository
         _context.SaveChanges();
     }
 
-    public Guid AddBook(Book book)
+    public Guid AddBook(Book book, User owner)
     {
+        book.TradeRequests = new List<TradeRequest>();
+        book.Users = new List<User>();
+
         _context.Books.Add(book);
         _context.SaveChanges();
 

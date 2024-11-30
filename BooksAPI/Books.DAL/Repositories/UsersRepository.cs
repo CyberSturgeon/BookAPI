@@ -73,6 +73,9 @@ public class UsersRepository : IUsersRepository
 
     public Guid AddUser(User user)
     {
+        user.Trades = new List<TradeRequest>();
+        user.Books = new List<Book>();
+
         _context.Users.Add(user);
         _context.SaveChanges();
 

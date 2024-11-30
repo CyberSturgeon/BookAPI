@@ -31,6 +31,7 @@ public class UsersService : IUsersService
         var config = new MapperConfiguration(
                 cfg =>
                 {
+                    cfg.AddProfile(new BookMapperProfile());
                     cfg.AddProfile(new UserMapperProfile());
                 });
         _mapper = new Mapper(config);

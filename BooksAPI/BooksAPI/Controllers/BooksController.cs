@@ -26,6 +26,7 @@ public class BooksController : Controller
         var config = new MapperConfiguration(
                 cfg =>
                 {
+                    cfg.AddProfile(new UserMapperProfile());
                     cfg.AddProfile(new BookMapperProfile());
                 });
         _mapper = new Mapper(config);
@@ -50,7 +51,7 @@ public class BooksController : Controller
     [HttpPost("search"), AllowAnonymous]
     public ActionResult<List<BookShortResponse>> SearchBooks([FromBody] SearchBookRequest request)
     {
-        var books = new List<BookShortResponse>();
+        var books = _mapper.Map<List<BookShortResponse>>(_service.GetAllBooks());
         return Ok(books);
     }
 
@@ -70,7 +71,7 @@ public class BooksController : Controller
     [HttpGet, AllowAnonymous]
     public ActionResult<List<BookShortResponse>> GetBooks()
     {
-        var books = new List<BookShortResponse>();//no filtering
+        var books = _mapper.Map<List<BookShortResponse>>(_service.GetAllBooks());//no filtering
         return Ok(books);
     }
 

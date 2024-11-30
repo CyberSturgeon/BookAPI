@@ -14,9 +14,7 @@ public class BooksContext: DbContext
     public DbSet<TradeRequest> TradeRequests { get; set; }
 
     public BooksContext()
-    {
-        Database.EnsureCreated();
-    }
+    {}
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

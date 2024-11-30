@@ -26,6 +26,7 @@ public class BooksService : IBooksService
         var config = new MapperConfiguration(
                 cfg =>
                 {
+                    cfg.AddProfile(new UserMapperProfile());
                     cfg.AddProfile(new BookMapperProfile());
                 });
         _mapper = new Mapper(config);
@@ -33,10 +34,14 @@ public class BooksService : IBooksService
 
     public Guid AddBook(CreateBookModel bookModel)
     {
-        var book = _mapper.Map<Book>(bookModel) ??
-            throw new EntityInvalidDataException($"Data to create book {bookModel.Name} is invalid");
+        var owner = _usersRepository.GetUserById(bookModel.UserId) ??
+            throw new EntityNotFoundException($"User {bookModel.UserId} not found");
 
-        var id = _booksRepository.AddBook(book);
+        var book = _mapper.Map<Book>(bookModel);
+
+        var id = _booksRepository.AddBook(book, owner);
+
+        _booksRepository.AddUserToBook(book, owner);
 
         return id;
     }
