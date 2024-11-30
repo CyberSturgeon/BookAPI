@@ -1,29 +1,43 @@
-﻿using Books.BLL.Services;
+﻿using AutoMapper;
+using Books.BLL.Services;
 using Books.BLL.Services.Interfaces;
 using BooksAPI.Models.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SampleBackend.Models.Requests;
-using SampleBackend.Models.Responses;
+using BooksAPI.Models.Requests;
+using Books.BLL.Models;
+using BooksAPI.Mappings;
 
-namespace SampleBackend.Controllers;
+namespace BooksAPI.Controllers;
 
 [ApiController]
 [Route("api/users")]
 [Authorize]
 public class UsersController : Controller
 {
-    private IUsersService _manager;
+    private IUsersService _service;
+
+    private readonly Mapper _mapper;
 
     public UsersController()
     {
-        _manager = new UsersService();
+        var config = new MapperConfiguration(
+                cfg =>
+                {
+                    cfg.AddProfile(new BookMapperProfile());
+                    cfg.AddProfile(new UserMapperProfile());
+                });
+        _mapper = new Mapper(config);
+
+        _service = new UsersService();
     }
 
     [HttpPost, AllowAnonymous]
     public ActionResult<Guid> Register([FromBody] RegisterUserRequest request)
     {
-        var addedUserId = Guid.NewGuid();
+        var userToCreate = _mapper.Map<CreateUserModel>(request);
+        var addedUserId = _service.AddUser(userToCreate);
+
         return Ok(addedUserId);
     }
 
@@ -36,7 +50,7 @@ public class UsersController : Controller
             return BadRequest("The login request is bad.");
         }
 
-        var token = _manager.VerifyUser(request.Email, request.Password);
+        var token = _service.VerifyUser(request.Email, request.Password);
 
         return Ok(new AuthenticatedResponse { Token = token });
     }
@@ -59,25 +73,33 @@ public class UsersController : Controller
     [HttpGet("{id}"), AllowAnonymous]
     public ActionResult<UserFullResponse> GetUserById([FromRoute] Guid id)
     {
-        var user = new UserFullResponse();
+        var user = _mapper.Map<UserFullResponse>(_service.GetUserById(id));
+
         return Ok(user);
     }
 
     [HttpGet, AllowAnonymous]
-    public ActionResult<List<UserResponse>> GetUsers()
+    public ActionResult<ICollection<UserResponse>> GetUsers()
     {
-        return Ok();
+        var users = _mapper.Map<List<UserResponse>>(_service.GetAllUsers());    
+
+        return Ok(users);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id}"), AllowAnonymous]
     public IActionResult UpdateUser([FromRoute] Guid id, [FromBody] UpdateUserRequest request)
     {
+        var userToUpdate = _mapper.Map<UpdateUserModel>(request);
+        _service.UpdateUser(id, userToUpdate);
+
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id}"), AllowAnonymous]
     public IActionResult DeleteUser([FromRoute] Guid id)
     {
+        _service.DeleteUser(id);
+
         return NoContent();
     }
 

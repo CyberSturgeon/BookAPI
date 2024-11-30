@@ -1,4 +1,4 @@
-﻿namespace SampleBackend.Models.Responses;
+﻿namespace BooksAPI.Models.Responses;
 
 public class UserResponse
 {
@@ -7,6 +7,4 @@ public class UserResponse
     public string Name { get; set; }
 
     public string Email { get; set; }
-
-    public int Trades { get; set; }
 }

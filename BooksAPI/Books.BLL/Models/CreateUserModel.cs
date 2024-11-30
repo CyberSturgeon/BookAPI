@@ -1,7 +1,7 @@
 ﻿
 namespace Books.BLL.Models;
 
-public class RegisterUserModel
+public class CreateUserModel
 {
     public string Name { get; set; }
 

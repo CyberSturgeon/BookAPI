@@ -1,4 +1,5 @@
 ﻿using Books.DAL.DTOs;
+using Microsoft.EntityFrameworkCore;
 namespace Books.DAL.Repositories.Interfaces;
 
 public class BooksRepository : IBooksRepository
@@ -19,12 +20,19 @@ public class BooksRepository : IBooksRepository
         return _context.Books.Where(b => b.Id == id).FirstOrDefault();
     }
 
+    public Book? GetBookFullProfileById(Guid id)
+    {
+        return _context.Books.Where(b => b.Id == id)
+            .Include(b => b.Users)
+            .Include(b => b.TradeRequests).FirstOrDefault();
+    }
+
     public ICollection<Book>? GetBooks()
     {
         return _context.Books.ToList();
     }
 
-    public ICollection<Book>? GetBooksByFilter(BooksFilter filter)
+    public ICollection<Book>? GetBooksByFilter(BookFilter filter)
     {
 
         return _context.Books.Where(b => string.IsNullOrEmpty(filter.Name) || b.Name == filter.Name &&
@@ -47,8 +55,11 @@ public class BooksRepository : IBooksRepository
         _context.SaveChanges();
     }
 
-    public Guid AddBook(Book book)
+    public Guid AddBook(Book book, User owner)
     {
+        book.TradeRequests = new List<TradeRequest>();
+        book.Users = new List<User>();
+
         _context.Books.Add(book);
         _context.SaveChanges();
 

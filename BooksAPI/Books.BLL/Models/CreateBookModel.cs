@@ -1,6 +1,7 @@
-﻿namespace BooksAPI.Models.Requests;
+﻿
+namespace Books.BLL.Models;
 
-public class UpdateBookRequest
+public class CreateBookModel
 {
     public string Name { get; set; }
 
@@ -8,4 +9,5 @@ public class UpdateBookRequest
 
     public string Genre { get; set; }
 
+    public Guid UserId { get; set; }
 }

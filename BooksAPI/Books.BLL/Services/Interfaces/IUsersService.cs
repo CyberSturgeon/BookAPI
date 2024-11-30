@@ -4,7 +4,7 @@ namespace Books.BLL.Services.Interfaces
 {
     public interface IUsersService
     {
-        void AddUser(UserModel user);
+        Guid AddUser(CreateUserModel user);
         void DeleteUser(Guid id);
         ICollection<UserModel> GetAllUsers();
         UserModel GetUserByEmail(string email);

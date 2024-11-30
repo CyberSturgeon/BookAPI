@@ -1,4 +1,4 @@
-﻿namespace SampleBackend.Models.Responses;
+﻿namespace BooksAPI.Models.Responses;
 
 public class UserFullResponse
 {
@@ -8,9 +8,7 @@ public class UserFullResponse
 
     public string Email { get; set; }
 
-    public int BooksCount { get; set; }
+    public ICollection<BookShortResponse> Books { get; set; }
 
-    public List<BookShortResponse> Books { get; set; }
-
-    public List<TradeRequestResponse> TradeRequests { get; set; }
+    public ICollection<TradeRequestResponse> TradeRequests { get; set; }
 }

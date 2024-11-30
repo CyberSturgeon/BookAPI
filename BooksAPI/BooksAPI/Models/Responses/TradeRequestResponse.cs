@@ -1,6 +1,6 @@
 ﻿using BooksAPI.Models.Enums;
 
-namespace SampleBackend.Models.Responses;
+namespace BooksAPI.Models.Responses;
 
 public class TradeRequestResponse
 {

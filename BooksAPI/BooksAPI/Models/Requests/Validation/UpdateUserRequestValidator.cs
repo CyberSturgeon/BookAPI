@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using SampleBackend.Models.Requests;
+using BooksAPI.Models.Requests;
 
 namespace BooksAPI.Models.Requests.Validation;
 
