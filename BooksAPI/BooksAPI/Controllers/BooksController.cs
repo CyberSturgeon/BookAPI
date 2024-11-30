@@ -4,6 +4,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using BooksAPI.Models.Requests;
 using BooksAPI.Models.Responses;
+using AutoMapper;
+using Books.BLL.Services.Interfaces;
+using Books.BLL.Services;
+using BooksAPI.Mappings;
+using Books.BLL.Models;
 
 namespace BooksAPI.Controllers;
 
@@ -12,17 +17,33 @@ namespace BooksAPI.Controllers;
 [Route("api/books")]
 public class BooksController : Controller
 {
-    [HttpPost]
+    private IBooksService _service;
+
+    private readonly Mapper _mapper;
+
+    public BooksController()
+    {
+        var config = new MapperConfiguration(
+                cfg =>
+                {
+                    cfg.AddProfile(new BookMapperProfile());
+                });
+        _mapper = new Mapper(config);
+
+        _service = new BooksService();
+    }
+
+    [HttpPost, AllowAnonymous]
     public ActionResult<Guid> AddBook([FromBody] CreateBookRequest request)
     {
-        var addedBookId = Guid.NewGuid();
+        var addedBookId = _service.AddBook(_mapper.Map<CreateBookModel>(request));
         return Ok(addedBookId);
     }
 
     [HttpGet("{id}"), AllowAnonymous]
     public ActionResult<BookFullResponse> GetBookById([FromRoute] Guid id)
     {
-        var book = new BookFullResponse();//filter by book id
+        var book = _mapper.Map<BookFullModel>(_service.GetBookById(id));
         return Ok(book);
     }
 
@@ -53,15 +74,17 @@ public class BooksController : Controller
         return Ok(books);
     }
 
-    [HttpPatch("{id}")]
+    [HttpPatch("{id}"), AllowAnonymous]
     public IActionResult UpdateBook([FromRoute] Guid id, [FromBody] UpdateBookRequest request)
     {
+        _service.UpdateBook(id, _mapper.Map<UpdateBookModel>(request));
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id}"), AllowAnonymous]
     public IActionResult DeleteBook([FromRoute] Guid id)
     {
+        _service.DeleteBook(id);
         return NoContent();
     }
 

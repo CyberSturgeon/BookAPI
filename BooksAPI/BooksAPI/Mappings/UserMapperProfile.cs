@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Books.BLL.Models;
-using Microsoft.AspNetCore.Identity.Data;
 using BooksAPI.Models.Requests;
 using BooksAPI.Models.Responses;
 

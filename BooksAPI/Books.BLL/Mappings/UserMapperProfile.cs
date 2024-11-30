@@ -10,12 +10,10 @@ public class UserMapperProfile:Profile
     {
         CreateMap<User, UserModel>();
         CreateMap<User, UserFullModel>()
-            .ForMember(u => u.Books, opt => opt.Ignore())
-            .ForMember(u => u.Trades, opt => opt.Ignore());
+            .ForMember(ufm => ufm.Books, opt =>opt.MapFrom(u => u.Books))
+            .ForMember(ufm => ufm.Trades, opt => opt.MapFrom(u => u.Trades));
         CreateMap<CreateUserModel, User>();
-        CreateMap<UpdateUserModel, User>()
-            .ForMember(u => u.Books, opt => opt.Ignore())
-            .ForMember(u => u.Trades, opt => opt.Ignore());
+        CreateMap<UpdateUserModel, User>();
 
     }
 }

@@ -15,6 +15,7 @@ public class BooksContext: DbContext
 
     public BooksContext()
     {
+        Database.EnsureCreated();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

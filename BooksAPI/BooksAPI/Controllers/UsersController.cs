@@ -85,7 +85,7 @@ public class UsersController : Controller
         return Ok(users);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id}"), AllowAnonymous]
     public IActionResult UpdateUser([FromRoute] Guid id, [FromBody] UpdateUserRequest request)
     {
         var userToUpdate = _mapper.Map<UpdateUserModel>(request);
@@ -94,7 +94,7 @@ public class UsersController : Controller
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id}"), AllowAnonymous]
     public IActionResult DeleteUser([FromRoute] Guid id)
     {
         _service.DeleteUser(id);

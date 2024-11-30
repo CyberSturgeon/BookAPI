@@ -10,12 +10,11 @@ public class BookMapperProfile : Profile
     {
         CreateMap<Book, BookModel>();
         CreateMap<Book, BookFullModel>()
-            .ForMember(b => b.Users, opt => opt.Ignore())
-            .ForMember(b => b.TradeRequests, opt => opt.Ignore());
+            .ForMember(bfm => bfm.Users, opt => opt.MapFrom(b => b.Users))
+            .ForMember(bfm => bfm.TradeRequests, opt => opt.MapFrom(b => b.TradeRequests));
         CreateMap<CreateBookModel, Book>();
-        CreateMap<UpdateBookModel, Book>()
-            .ForMember(b => b.Users, opt => opt.Ignore())
-            .ForMember(b => b.TradeRequests, opt => opt.Ignore());
+        CreateMap<UpdateBookModel, Book>();
+        CreateMap<BookFilterModel, BookFilter>();
 
     }
 }

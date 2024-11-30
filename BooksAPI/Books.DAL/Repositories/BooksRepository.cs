@@ -32,7 +32,7 @@ public class BooksRepository : IBooksRepository
         return _context.Books.ToList();
     }
 
-    public ICollection<Book>? GetBooksByFilter(BooksFilter filter)
+    public ICollection<Book>? GetBooksByFilter(BookFilter filter)
     {
 
         return _context.Books.Where(b => string.IsNullOrEmpty(filter.Name) || b.Name == filter.Name &&
