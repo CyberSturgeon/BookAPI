@@ -4,47 +4,41 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Books.DAL.Repositories;
 
-public class UsersRepository : IUsersRepository
+public class UsersRepository(BooksContext context) : IUsersRepository
 {
-    private BooksContext _context;
-
-    public UsersRepository()
-    {
-        _context = new BooksContext();
-    }
-
     public User? VerifyUser(string email, string password)
     {
-        return _context.Users
+        return context.Users
             .Where(u => u.Email == email && u.Password == password).FirstOrDefault();
     }
 
     public User? GetUserByEmail(string email)
     {
-        return _context.Users.Where(u => u.Email == email).FirstOrDefault();
+        return context.Users.Where(u => u.Email == email).FirstOrDefault();
     }
 
     public User? GetUserById(Guid id)
     {
-        return _context.Users.Where(u => u.Id == id).FirstOrDefault();
+        return context.Users.Where(u => u.Id == id).FirstOrDefault();
     }
 
     public User? GetUserFullProfileById(Guid id)
     {
-        return _context.Users.Where(u => u.Id == id)
+        return context.Users.Where(u => u.Id == id)
             .Include(u => u.Books)
             .Include(u => u.Trades).FirstOrDefault();
     }
 
     public ICollection<User>? GetUsers()
     {
-        return _context.Users.ToList();
+        
+        return context.Users.ToList();
     }
 
     public void DeleteUser(User user)
     {
-        _context.Users.Remove(user);
-        _context.SaveChanges();
+        context.Users.Remove(user);
+        context.SaveChanges();
     }
 
     public void UpdateUser(User user, User newUser)
@@ -54,21 +48,21 @@ public class UsersRepository : IUsersRepository
         user.Trades = newUser.Trades;
         user.Books = newUser.Books;
         
-        _context.SaveChanges();
+        context.SaveChanges();
     }
 
     public void AddBookToUser(Book book, User owner)
     {
         owner.Books.Add(book);
 
-        _context.SaveChanges();
+        context.SaveChanges();
     }
 
     public void UpdateUserPassword(User user, string password)
     {
         user.Password = password;
 
-        _context.SaveChanges();
+        context.SaveChanges();
     }
 
     public Guid AddUser(User user)
@@ -76,8 +70,8 @@ public class UsersRepository : IUsersRepository
         user.Trades = new List<TradeRequest>();
         user.Books = new List<Book>();
 
-        _context.Users.Add(user);
-        _context.SaveChanges();
+        context.Users.Add(user);
+        context.SaveChanges();
 
         return user.Id;
     }
