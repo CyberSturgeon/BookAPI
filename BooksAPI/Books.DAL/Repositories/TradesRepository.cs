@@ -4,7 +4,7 @@ using Books.DAL.Repositories.Interfaces;
 
 namespace Books.DAL.Repositories;
 
-public class TradesRepository(BooksContext context, IUsersRepository usersRepository) : ITradesRepository
+public class TradesRepository(BooksContext context) : ITradesRepository
 {
     public TradeRequest? GetTradeById(Guid id)
     {
