@@ -51,7 +51,7 @@ public class BooksController : Controller
     [HttpPost("search"), AllowAnonymous]
     public ActionResult<List<BookShortResponse>> SearchBooks([FromBody] SearchBookRequest request)
     {
-        var books = _mapper.Map<List<BookShortResponse>>(_service.GetAllBooks());
+        var books = _mapper.Map<List<BookShortResponse>>(_service.GetBooksByFilter(_mapper.Map<BookFilterModel>(request)));
         return Ok(books);
     }
 

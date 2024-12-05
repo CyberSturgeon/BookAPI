@@ -47,6 +47,11 @@ public class BooksService : IBooksService
         return id;
     }
 
+    public List<BookModel> GetBooksByFilter(BookFilterModel filter)
+    {
+        return _mapper.Map<List<BookModel>>(_booksRepository.GetBooksByFilter(_mapper.Map<BookFilter>(filter)));
+    }
+
     public BookFullModel GetBookById(Guid id)
     {
         return _mapper.Map<BookFullModel>(_booksRepository.GetBookFullProfileById(id)) ??
@@ -55,8 +60,7 @@ public class BooksService : IBooksService
 
     public ICollection<BookModel> GetAllBooks()
     {
-        return _mapper.Map<List<BookModel>>(_booksRepository.GetBooks()) ??
-            throw new EntityNotFoundException("Books not found");
+        return _mapper.Map<List<BookModel>>(_booksRepository.GetBooks());
     }
 
     public void DeleteBook(Guid id)

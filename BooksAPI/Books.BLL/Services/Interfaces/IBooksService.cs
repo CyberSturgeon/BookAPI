@@ -10,5 +10,6 @@ namespace Books.BLL.Services.Interfaces
         ICollection<BookModel> GetAllBooks();
         BookFullModel GetBookById(Guid id);
         void UpdateBook(Guid id, UpdateBookModel newBookModel);
+        public List<BookModel> GetBooksByFilter(BookFilterModel filter);
     }
 }
