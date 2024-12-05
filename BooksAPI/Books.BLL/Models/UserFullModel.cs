@@ -13,7 +13,7 @@ public class UserFullModel
 
     public string Password { get; set; }
 
-    public ICollection<BookModel>? Books { get; set; }
+    public ICollection<BookModel> Books { get; set; } = [];
 
-    public ICollection<TradeRequest> Trades { get; set; }
+    public ICollection<TradeRequest> Trades { get; set; } = [];
 }

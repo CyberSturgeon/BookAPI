@@ -54,6 +54,13 @@ public class UsersService(IBooksRepository booksRepository,
         var user = usersRepository.GetUserById(id) ??
             throw new EntityNotFoundException($"User {id} not found");
 
+        var existsUser = usersRepository.GetUserByEmail(newUserModel.Email);
+        
+        if (existsUser != null && user.Email != newUserModel.Email)
+        {
+            throw new EntityConflictException($"{newUserModel.Email} already exists.");
+        }
+
         var newUser = mapper.Map<User>(newUserModel);
 
         usersRepository.UpdateUser(user, newUser);

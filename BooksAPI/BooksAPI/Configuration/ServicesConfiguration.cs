@@ -15,6 +15,8 @@ public static class ServicesConfiguration
         services.AddSwaggerGen();
         services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssemblyContaining<CreateBookRequestValidator>();
-        services.AddAutoMapper(typeof(BookMapperProfile).Assembly);
+        services.AddAutoMapper(typeof(BookMapperProfile).Assembly,
+                typeof(UserMapperProfile).Assembly,
+                typeof(TradeMapperProfile).Assembly);
     }
 }

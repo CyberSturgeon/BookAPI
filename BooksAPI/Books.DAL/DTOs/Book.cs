@@ -11,7 +11,7 @@ public class Book
 
     public string Genre { get; set; }
 
-    public ICollection<TradeRequest>? TradeRequests { get; set; }
+    public ICollection<TradeRequest> TradeRequests { get; set; } = [];
 
-    public ICollection<User>? Users { get; set; }
+    public ICollection<User> Users { get; set; } = [];
 }
