@@ -28,6 +28,7 @@ public class BooksService : IBooksService
                 {
                     cfg.AddProfile(new UserMapperProfile());
                     cfg.AddProfile(new BookMapperProfile());
+                    cfg.AddProfile(new TradeMapperProfile());
                 });
         _mapper = new Mapper(config);
     }
@@ -46,16 +47,20 @@ public class BooksService : IBooksService
         return id;
     }
 
+    public List<BookModel> GetBooksByFilter(BookFilterModel filter)
+    {
+        return _mapper.Map<List<BookModel>>(_booksRepository.GetBooksByFilter(_mapper.Map<BookFilter>(filter)));
+    }
+
     public BookFullModel GetBookById(Guid id)
     {
         return _mapper.Map<BookFullModel>(_booksRepository.GetBookFullProfileById(id)) ??
-            throw new EntityNotFoundException($"Book {id} not found"); ;
+            throw new EntityNotFoundException($"Book {id} not found"); 
     }
 
     public ICollection<BookModel> GetAllBooks()
     {
-        return _mapper.Map<List<BookModel>>(_booksRepository.GetBooks()) ??
-            throw new EntityNotFoundException("Books not found");
+        return _mapper.Map<List<BookModel>>(_booksRepository.GetBooks());
     }
 
     public void DeleteBook(Guid id)

@@ -33,6 +33,7 @@ public class UsersService : IUsersService
                 {
                     cfg.AddProfile(new BookMapperProfile());
                     cfg.AddProfile(new UserMapperProfile());
+                    cfg.AddProfile(new TradeMapperProfile());
                 });
         _mapper = new Mapper(config);
     }
