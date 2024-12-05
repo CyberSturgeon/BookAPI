@@ -1,7 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Books.DAL.Configurations;
 using Books.DAL.DTOs;
-using Books.Core;
-using Books.DAL.Configurations;
+using Microsoft.EntityFrameworkCore;
 
 namespace Books.DAL;
 
@@ -13,13 +12,8 @@ public class BooksContext: DbContext
 
     public DbSet<TradeRequest> TradeRequests { get; set; }
 
-    public BooksContext()
-    {}
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    public BooksContext(DbContextOptions<BooksContext> opts) : base(opts)
     {
-        string connectionString = Options.ConnectionString;
-        optionsBuilder.UseNpgsql(connectionString);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
