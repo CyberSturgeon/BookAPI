@@ -22,11 +22,11 @@ public class UsersService : IUsersService
 
     private readonly Mapper _mapper;
 
-    public UsersService(IBooksRepository booksRepository, IUsersRepository usersRepository)
+    public UsersService()
     {
-        _usersRepository = usersRepository;
+        _usersRepository = new UsersRepository();
 
-        _booksRepository = booksRepository;
+        _booksRepository = new BooksRepository();
 
         var config = new MapperConfiguration(
                 cfg =>

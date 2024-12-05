@@ -1,6 +1,7 @@
-using Books.BLL.Configuration;
-using Books.DAL;
 using BooksAPI.Configuration;
+using BooksAPI.Models.Requests.Validation;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 namespace BooksAPI;
 public class Program
@@ -9,27 +10,26 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Configuration
-            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-            .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
-            .AddJsonFile("appsettings.secrets.json", optional: true, reloadOnChange: true)
-            .AddCommandLine(args)
-            .AddEnvironmentVariables()
-            .Build();
+        builder.Services.AddAuth();
 
-        var configuration = builder.Configuration;
-
-        builder.Services.AddApiServices();
-        builder.Services.AddBllServices();
-        builder.Services.AddDalServices(configuration);        
+        builder.Services.AddControllers();
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+        builder.Services.AddFluentValidationAutoValidation();
+        builder.Services.AddValidatorsFromAssemblyContaining<CreateBookRequestValidator>();
 
         var app = builder.Build();
-        
-        app.UseSwagger();
-        app.UseSwaggerUI();
+
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
 
         app.UseHttpsRedirection();
+
         app.UseAuthorization();
+
         app.MapControllers();
 
         app.Run();

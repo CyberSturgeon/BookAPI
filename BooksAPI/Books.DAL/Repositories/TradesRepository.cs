@@ -4,22 +4,33 @@ using Books.DAL.Repositories.Interfaces;
 
 namespace Books.DAL.Repositories;
 
-public class TradesRepository(BooksContext context, IUsersRepository usersRepository) : ITradesRepository
+public class TradesRepository : ITradesRepository
 {
+    private BooksContext _context;
+
+    private readonly IUsersRepository _usersRepository;
+
+    public TradesRepository()
+    {
+        _usersRepository = new UsersRepository();
+
+        _context = new BooksContext();
+    }
+
     public TradeRequest? GetTradeById(Guid id)
     {
-        return context.TradeRequests.Where(t => t.Id == id).FirstOrDefault();
+        return _context.TradeRequests.Where(t => t.Id == id).FirstOrDefault();
     }
 
     public ICollection<TradeRequest>? GetTrades()
     {
-        return context.TradeRequests.ToList();
+        return _context.TradeRequests.ToList();
     }
 
     public void DeleteTrade(TradeRequest trade)
     {
-        context.TradeRequests.Remove(trade);
-        context.SaveChanges();
+        _context.TradeRequests.Remove(trade);
+        _context.SaveChanges();
     }
 
     public void UpdateTrade(TradeRequest trade, TradeRequest newTrade)
@@ -28,20 +39,20 @@ public class TradesRepository(BooksContext context, IUsersRepository usersReposi
         trade.Buyer = newTrade.Buyer;
         trade.Book = newTrade.Book;
 
-        context.SaveChanges();
+        _context.SaveChanges();
     }
 
     public void UpdateTradeStatus(TradeRequest trade, TradeRequestStatus status)
     {
         trade.TradeStatus = status;
 
-        context.SaveChanges();
+        _context.SaveChanges();
     }
 
     public Guid AddTrade(TradeRequest trade)
     {
-        context.TradeRequests.Add(trade);
-        context.SaveChanges();
+        _context.TradeRequests.Add(trade);
+        _context.SaveChanges();
 
         return trade.Id;
     }

@@ -8,10 +8,11 @@ public class BooksRepository : IBooksRepository
     
     private readonly IUsersRepository _usersRepository;
 
-    public BooksRepository(BooksContext context, IUsersRepository usersRepository)
+    public BooksRepository()
     {
-        _usersRepository = usersRepository;
-        _context = context;
+        _usersRepository = new UsersRepository();
+
+        _context = new BooksContext();
     }
 
     public Book? GetBookById(Guid id)

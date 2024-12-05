@@ -1,43 +1,57 @@
-﻿using AutoMapper;
-using Books.BLL.Models;
-using Books.BLL.Services.Interfaces;
+﻿using BooksAPI.Models.Requests;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using BooksAPI.Models.Requests;
 using BooksAPI.Models.Responses;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
+using Books.BLL.Services.Interfaces;
+using Books.BLL.Services;
+using BooksAPI.Mappings;
+using Books.BLL.Models;
 
 namespace BooksAPI.Controllers;
 
 [Authorize]
 [ApiController]
 [Route("api/books")]
-public class BooksController(
-        IBooksService booksService,
-        IMapper mapper
-    ) : Controller
+public class BooksController : Controller
 {
+    private IBooksService _service;
+
+    private readonly Mapper _mapper;
+
+    public BooksController()
+    {
+        var config = new MapperConfiguration(
+                cfg =>
+                {
+                    cfg.AddProfile(new UserMapperProfile());
+                    cfg.AddProfile(new BookMapperProfile());
+                });
+        _mapper = new Mapper(config);
+
+        _service = new BooksService();
+    }
+
     [HttpPost, AllowAnonymous]
     public ActionResult<Guid> AddBook([FromBody] CreateBookRequest request)
     {
-        var addedBookId = booksService.AddBook(mapper.Map<CreateBookModel>(request));
+        var addedBookId = _service.AddBook(_mapper.Map<CreateBookModel>(request));
         return Ok(addedBookId);
     }
 
     [HttpGet("{id}"), AllowAnonymous]
     public ActionResult<BookFullResponse> GetBookById([FromRoute] Guid id)
     {
-        var book = mapper.Map<BookFullModel>(booksService.GetBookById(id));
+        var book = _mapper.Map<BookFullModel>(_service.GetBookById(id));
         return Ok(book);
     }
 
     [HttpPost("search"), AllowAnonymous]
     public ActionResult<List<BookShortResponse>> SearchBooks([FromBody] SearchBookRequest request)
     {
-<<<<<<< HEAD
         var books = _mapper.Map<List<BookShortResponse>>(_service.GetBooksByFilter(_mapper.Map<BookFilterModel>(request)));
-=======
-        var books = mapper.Map<List<BookShortResponse>>(booksService.GetAllBooks());
->>>>>>> di-experiments
         return Ok(books);
     }
 
@@ -57,21 +71,21 @@ public class BooksController(
     [HttpGet, AllowAnonymous]
     public ActionResult<List<BookShortResponse>> GetBooks()
     {
-        var books = mapper.Map<List<BookShortResponse>>(booksService.GetAllBooks());//no filtering
+        var books = _mapper.Map<List<BookShortResponse>>(_service.GetAllBooks());//no filtering
         return Ok(books);
     }
 
     [HttpPatch("{id}"), AllowAnonymous]
     public IActionResult UpdateBook([FromRoute] Guid id, [FromBody] UpdateBookRequest request)
     {
-        booksService.UpdateBook(id, mapper.Map<UpdateBookModel>(request));
+        _service.UpdateBook(id, _mapper.Map<UpdateBookModel>(request));
         return NoContent();
     }
 
     [HttpDelete("{id}"), AllowAnonymous]
     public IActionResult DeleteBook([FromRoute] Guid id)
     {
-        booksService.DeleteBook(id);
+        _service.DeleteBook(id);
         return NoContent();
     }
 

@@ -21,7 +21,7 @@ public class UsersController : Controller
 
     private readonly Mapper _mapper;
 
-    public UsersController(IUsersService usersService)
+    public UsersController()
     {
         var config = new MapperConfiguration(
                 cfg =>
@@ -31,12 +31,8 @@ public class UsersController : Controller
                 });
         _mapper = new Mapper(config);
 
-<<<<<<< HEAD
         _usersService = new UsersService();
         _booksService = new BooksService();
-=======
-        _service = usersService;
->>>>>>> di-experiments
     }
 
     [HttpPost, AllowAnonymous]
