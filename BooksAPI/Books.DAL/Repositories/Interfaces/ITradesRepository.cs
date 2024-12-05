@@ -5,11 +5,15 @@ namespace Books.DAL.Repositories.Interfaces
 {
     public interface ITradesRepository
     {
-        public Guid AddTrade(TradeRequest trade);
-        public void DeleteTrade(TradeRequest trade);
-        public TradeRequest? GetTradeById(Guid id);
-        public ICollection<TradeRequest>? GetTrades();
-        public void UpdateTrade(TradeRequest trade, TradeRequest newTrade);
-        public void UpdateTradeStatus(TradeRequest trade, TradeRequestStatus status);
+        Guid AddTrade(TradeRequest trade);
+        void DeleteTrade(TradeRequest trade);
+        void DeleteTrades(List<TradeRequest> trades);
+        TradeRequest? GetFullTradeById(Guid id);
+        TradeRequest? GetTradeById(Guid id);
+        ICollection<TradeRequest>? GetTradesByBookId(Guid bookId);
+        ICollection<TradeRequest>? GetTradesByBuyerId(Guid buyerId);
+        ICollection<TradeRequest>? GetTradesByOwnerId(Guid ownerId);
+        void UpdateTrade(TradeRequest trade, TradeRequest newTrade);
+        void UpdateTradeStatus(TradeRequest trade, TradeRequestStatus status);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Books.Core;
 using Books.DAL.DTOs;
 using Books.DAL.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Books.DAL.Repositories;
 
@@ -11,9 +12,34 @@ public class TradesRepository(BooksContext context) : ITradesRepository
         return context.TradeRequests.Where(t => t.Id == id).FirstOrDefault();
     }
 
-    public ICollection<TradeRequest>? GetTrades()
+    public TradeRequest? GetFullTradeById(Guid id)
     {
-        return context.TradeRequests.ToList();
+        return context.TradeRequests.Where(t => t.Id == id)
+            .Include(t => t.Buyer)
+            .Include(t => t.Owner)
+            .Include(t => t.Book)
+            .Include(t => t.BookOffer)
+            .FirstOrDefault();
+    }
+
+    public ICollection<TradeRequest>? GetTradesByOwnerId(Guid ownerId)
+    {
+        return context.TradeRequests.Where(t => t.Owner.Id == ownerId).ToList();
+    }
+
+    public ICollection<TradeRequest>? GetTradesByBuyerId(Guid buyerId)
+    {
+        return context.TradeRequests.Where(t => t.Buyer.Id == buyerId).ToList();
+    }
+
+    public ICollection<TradeRequest>? GetTradesByBookId(Guid bookId)
+    {
+        return context.TradeRequests.Where(t => t.Book.Id == bookId).ToList();
+    }
+
+    public void DeleteTrades(List<TradeRequest> trades)
+    {
+        context.TradeRequests.RemoveRange(trades);
     }
 
     public void DeleteTrade(TradeRequest trade)
