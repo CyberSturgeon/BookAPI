@@ -13,30 +13,16 @@ namespace BooksAPI.Controllers;
 [ApiController]
 [Route("api/users")]
 [Authorize]
-public class UsersController : Controller
+public class UsersController(
+        IUsersService usersService,
+        IMapper mapper) : Controller
 {
-    private IUsersService _service;
-
-    private readonly Mapper _mapper;
-
-    public UsersController(IUsersService usersService)
-    {
-        var config = new MapperConfiguration(
-                cfg =>
-                {
-                    cfg.AddProfile(new BookMapperProfile());
-                    cfg.AddProfile(new UserMapperProfile());
-                });
-        _mapper = new Mapper(config);
-
-        _service = usersService;
-    }
 
     [HttpPost, AllowAnonymous]
     public ActionResult<Guid> Register([FromBody] RegisterUserRequest request)
     {
-        var userToCreate = _mapper.Map<CreateUserModel>(request);
-        var addedUserId = _service.AddUser(userToCreate);
+        var userToCreate = mapper.Map<CreateUserModel>(request);
+        var addedUserId = usersService.AddUser(userToCreate);
 
         return Ok(addedUserId);
     }
@@ -50,7 +36,7 @@ public class UsersController : Controller
             return BadRequest("The login request is bad.");
         }
 
-        var token = _service.VerifyUser(request.Email, request.Password);
+        var token = usersService.VerifyUser(request.Email, request.Password);
 
         return Ok(new AuthenticatedResponse { Token = token });
     }
@@ -73,7 +59,7 @@ public class UsersController : Controller
     [HttpGet("{id}"), AllowAnonymous]
     public ActionResult<UserFullResponse> GetUserById([FromRoute] Guid id)
     {
-        var user = _mapper.Map<UserFullResponse>(_service.GetUserById(id));
+        var user = mapper.Map<UserFullResponse>(usersService.GetUserById(id));
 
         return Ok(user);
     }
@@ -81,7 +67,7 @@ public class UsersController : Controller
     [HttpGet, AllowAnonymous]
     public ActionResult<ICollection<UserResponse>> GetUsers()
     {
-        var users = _mapper.Map<List<UserResponse>>(_service.GetAllUsers());    
+        var users = mapper.Map<List<UserResponse>>(usersService.GetAllUsers());    
 
         return Ok(users);
     }
@@ -89,8 +75,8 @@ public class UsersController : Controller
     [HttpPut("{id}"), AllowAnonymous]
     public IActionResult UpdateUser([FromRoute] Guid id, [FromBody] UpdateUserRequest request)
     {
-        var userToUpdate = _mapper.Map<UpdateUserModel>(request);
-        _service.UpdateUser(id, userToUpdate);
+        var userToUpdate = mapper.Map<UpdateUserModel>(request);
+        usersService.UpdateUser(id, userToUpdate);
 
         return NoContent();
     }
@@ -98,7 +84,7 @@ public class UsersController : Controller
     [HttpDelete("{id}"), AllowAnonymous]
     public IActionResult DeleteUser([FromRoute] Guid id)
     {
-        _service.DeleteUser(id);
+        usersService.DeleteUser(id);
 
         return NoContent();
     }

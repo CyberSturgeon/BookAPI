@@ -2,24 +2,29 @@
 using Microsoft.AspNetCore.Mvc;
 using BooksAPI.Models.Requests;
 using BooksAPI.Models.Responses;
+using Books.BLL.Services.Interfaces;
+using AutoMapper;
+using Books.BLL.Models;
 
 namespace BooksAPI.Controllers;
 [ApiController]
 [Route("api/trade-requests")]
 [Authorize]
-public class TradeRequestsController : Controller
+public class TradeRequestsController(
+        ITradesService tradesService,
+        IMapper mapper) : Controller
 {
-    [HttpPost]
-    public ActionResult<Guid> AddTradeRequest([FromBody] RegisterUserRequest request)
+    [HttpPost, AllowAnonymous]
+    public ActionResult<Guid> AddTradeRequest([FromBody] TradeRequestRequest request)
     {
-        var addedRequestId = Guid.NewGuid();
+        var addedRequestId = tradesService.AddTradeToBook(mapper.Map<TradeModel>(request));
         return Ok(addedRequestId);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}"), AllowAnonymous]
     public ActionResult<TradeRequestResponse> GetTradeRequestById([FromRoute] Guid id)
     {
-        var tradeRequest = new TradeRequestResponse();
+        var tradeRequest = mapper.Map<TradeRequestResponse>(tradesService.GetTradeById(id));
         return Ok(tradeRequest);
     }
 

@@ -10,5 +10,6 @@ public class TradeMapperProfile: Profile
     public TradeMapperProfile()
     {
         CreateMap<TradeRequest, TradeModel>();
+        CreateMap<TradeModel, TradeRequest>();
     }
 }

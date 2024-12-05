@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Books.BLL.Exceptions;
 using Books.BLL.Models;
+using Books.BLL.Services.Interfaces;
 using Books.Core;
 using Books.DAL.DTOs;
 using Books.DAL.Repositories.Interfaces;
@@ -10,7 +11,7 @@ namespace Books.BLL.Services;
 public class TradesService(ITradesRepository tradesRepository,
         IUsersRepository usersRepository,
         IBooksRepository booksRepository,
-        IMapper mapper)
+        IMapper mapper) : ITradesService
 {
 
     public Guid AddTradeToBook(TradeModel tradeModel)
@@ -53,4 +54,9 @@ public class TradesService(ITradesRepository tradesRepository,
 
         tradesRepository.UpdateTradeStatus(trade, status);
     }
+
+    public TradeModel GetTradeById(Guid tradeId) 
+            => mapper.Map<TradeModel>(tradesRepository.GetTradeById(tradeId)) ??
+                throw new EntityNotFoundException($"Trade {tradeId} was not found");
+
 }

@@ -11,6 +11,9 @@ public static class ServicesConfiguration
     {
         services.AddScoped<IBooksService, BooksService>();
         services.AddScoped<IUsersService, UsersService>();
-        services.AddAutoMapper(typeof(BookMapperProfile).Assembly);
+        services.AddScoped<ITradesService, TradesService>();    
+        services.AddAutoMapper(typeof(BookMapperProfile).Assembly,
+                typeof(UserMapperProfile).Assembly,
+                typeof(TradeMapperProfile).Assembly);
     }
 }

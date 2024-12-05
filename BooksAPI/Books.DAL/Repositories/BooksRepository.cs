@@ -4,30 +4,24 @@ namespace Books.DAL.Repositories.Interfaces;
 
 public class BooksRepository(BooksContext context) : IBooksRepository
 {
-    public Book? GetBookById(Guid id)
-    {
-        return context.Books.Where(b => b.Id == id).FirstOrDefault();
-    }
+    public Book? GetBookById(Guid id) => context.Books
+            .FirstOrDefault(b => b.Id == id);
 
-    public Book? GetBookFullProfileById(Guid id)
-    {
-        return context.Books.Where(b => b.Id == id)
+    public Book? GetBookFullProfileById(Guid id) => context.Books
             .Include(b => b.Users)
-            .Include(b => b.TradeRequests).FirstOrDefault();
-    }
+            .Include(b => b.TradeRequests)
+            .FirstOrDefault(b => b.Id == id);
 
-    public ICollection<Book>? GetBooks()
-    {
-        return context.Books.ToList();
-    }
+    public ICollection<Book>? GetBooks() => context.Books.ToList();
 
-    public ICollection<Book>? GetBooksByFilter(BookFilter filter)
-    {
-
-        return context.Books.Where(b => string.IsNullOrEmpty(filter.Name) || b.Name == filter.Name &&
-            string.IsNullOrEmpty(filter.Author) || b.Author == filter.Author &&
-            string.IsNullOrEmpty(filter.Genre) || b.Genre == filter.Genre).ToList();
-    }
+    public ICollection<Book>? GetBooksByFilter(BookFilter filter) => context.Books
+            .Where(b => string.IsNullOrEmpty(filter.Name) || 
+                        b.Name == filter.Name &&
+                        string.IsNullOrEmpty(filter.Author) ||
+                        b.Author == filter.Author &&
+                        string.IsNullOrEmpty(filter.Genre) || 
+                        b.Genre == filter.Genre)
+            .ToList();
 
     public void DeleteBook(Book book)
     {
