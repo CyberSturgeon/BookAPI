@@ -14,98 +14,76 @@ using System.Text;
 
 namespace Books.BLL.Services;
 
-public class UsersService : IUsersService
+public class UsersService(IBooksRepository booksRepository,
+        IUsersRepository usersRepository,
+        IMapper mapper) : IUsersService
 {
-    private IUsersRepository _usersRepository;
-
-    private IBooksRepository _booksRepository;
-
-    private readonly Mapper _mapper;
-
-    public UsersService(IBooksRepository booksRepository, IUsersRepository usersRepository)
-    {
-        _usersRepository = usersRepository;
-
-        _booksRepository = booksRepository;
-
-        var config = new MapperConfiguration(
-                cfg =>
-                {
-                    cfg.AddProfile(new BookMapperProfile());
-                    cfg.AddProfile(new UserMapperProfile());
-                });
-        _mapper = new Mapper(config);
-    }
-
     public string VerifyUser(string email, string password)
     {
-        return LogIn(_mapper.Map<UserModel>(_usersRepository.VerifyUser(email, password))) ??
+        return LogIn(mapper.Map<UserModel>(usersRepository.VerifyUser(email, password))) ??
             throw new WrongLoginException($"Wrong Email or password, try again");
     }
 
     public UserModel GetUserByEmail(string email)
     {
-        return _mapper.Map<UserModel>(_usersRepository.GetUserByEmail(email)) ??
+        return mapper.Map<UserModel>(usersRepository.GetUserByEmail(email)) ??
             throw new EntityNotFoundException($"User {email} not found");
     }
 
     public UserFullModel GetUserById(Guid id)
     {
-        return _mapper.Map<UserFullModel>(_usersRepository.GetUserFullProfileById(id)) ??
+        return mapper.Map<UserFullModel>(usersRepository.GetUserFullProfileById(id)) ??
             throw new EntityNotFoundException($"User {id} not found");
     }
 
     public ICollection<UserModel> GetAllUsers()
     {
-        return _mapper.Map<List<UserModel>>(_usersRepository.GetUsers()) ??
-            throw new EntityNotFoundException($"Users not found");
+        return mapper.Map<List<UserModel>>(usersRepository.GetUsers());
     }
 
     public void DeleteUser(Guid id)
     {
-        var user = _usersRepository.GetUserById(id) ??
+        var user = usersRepository.GetUserById(id) ??
             throw new EntityNotFoundException($"User {id} not found");
 
-        _usersRepository.DeleteUser(user);
+        usersRepository.DeleteUser(user);
     }
 
     public void UpdateUser(Guid id, UpdateUserModel newUserModel)
     {
-        var user = _usersRepository.GetUserById(id) ??
+        var user = usersRepository.GetUserById(id) ??
             throw new EntityNotFoundException($"User {id} not found");
 
-        var newUser = _mapper.Map<User>(newUserModel) ??
-            throw new EntityInvalidDataException($"Data to update user {id} is invalid");
+        var newUser = mapper.Map<User>(newUserModel);
 
-        _usersRepository.UpdateUser(user, newUser);
+        usersRepository.UpdateUser(user, newUser);
     }
 
     public Guid AddUser(CreateUserModel userModel)
     {
-        var existsUser = _usersRepository.GetUserByEmail(userModel.Email);
+        var existsUser = usersRepository.GetUserByEmail(userModel.Email);
 
         if (existsUser != null)
         {
             throw new EntityConflictException($"User {userModel.Email} already exists");
         }
 
-        var userDto = _mapper.Map<User>(userModel) ??
-            throw new EntityInvalidDataException($"Data to create user {userModel.Email} is invalid");
+        var userDto = mapper.Map<User>(userModel);
         //userDto.Password = HashCode it
 
-        var id = _usersRepository.AddUser(userDto);
+        var id = usersRepository.AddUser(userDto);
         return id;
     }
 
     public void AddBookToUser(Guid userId, Guid bookId)
     {
-        var user = _usersRepository.GetUserFullProfileById(userId) ??
+        var user = usersRepository.GetUserFullProfileById(userId) ??
             throw new EntityNotFoundException($"User {userId} not found");
 
-        var book = _booksRepository.GetBookById(bookId) ??
+        var book = booksRepository.GetBookById(bookId) ??
             throw new EntityNotFoundException($"Book {bookId} not found");
 
-        _usersRepository.AddBookToUser(book, user);
+        usersRepository.AddBookToUser(book, user);
     }
 
     private string? LogIn(UserModel userModel)

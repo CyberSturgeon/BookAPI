@@ -14,6 +14,7 @@ public class BooksContext: DbContext
 
     public BooksContext(DbContextOptions<BooksContext> opts) : base(opts)
     {
+        //Database.EnsureCreated();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

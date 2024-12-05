@@ -35,8 +35,12 @@ public class BooksService(
 
     public ICollection<BookModel> GetAllBooks()
     {
-        return mapper.Map<List<BookModel>>(booksRepository.GetBooks()) ??
-            throw new EntityNotFoundException("Books not found");
+        return mapper.Map<List<BookModel>>(booksRepository.GetBooks());
+    }
+
+    public ICollection<BookModel> GetBooksByFilter(BookFilterModel filter)
+    {
+        return mapper.Map<List<BookModel>>(booksRepository.GetBooksByFilter(mapper.Map<BookFilter>(filter)));
     }
 
     public void DeleteBook(Guid id)
@@ -52,8 +56,7 @@ public class BooksService(
         var book = booksRepository.GetBookById(id) ??
             throw new EntityNotFoundException($"Book {id} not found");
 
-        var newBook = mapper.Map<Book>(newBookModel) ??
-            throw new EntityNotFoundException($"Data to update book {id} is invalid");
+        var newBook = mapper.Map<Book>(newBookModel);
 
         booksRepository.UpdateBook(book, newBook);
     }

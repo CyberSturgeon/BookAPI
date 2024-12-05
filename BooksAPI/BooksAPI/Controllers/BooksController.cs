@@ -33,7 +33,7 @@ public class BooksController(
     [HttpPost("search"), AllowAnonymous]
     public ActionResult<List<BookShortResponse>> SearchBooks([FromBody] SearchBookRequest request)
     {
-        var books = mapper.Map<List<BookShortResponse>>(booksService.GetAllBooks());
+        var books = mapper.Map<List<BookShortResponse>>(booksService.GetBooksByFilter(mapper.Map<BookFilterModel>(request)));
         return Ok(books);
     }
 
