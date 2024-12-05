@@ -13,25 +13,27 @@ public class TradesService(ITradesRepository tradesRepository,
         IBooksRepository booksRepository,
         IMapper mapper) : ITradesService
 {
-
-    public Guid AddTradeToBook(TradeModel tradeModel)
+    public Guid AddTradeToBook(TradeRequestModel tradeModel)
     {
-        var bookId = tradeModel.Book.Id;
-        var bookOfferId = tradeModel.BookOffer.Id;
-        var ownerId = tradeModel.Owner.Id;
-        var buyerId = tradeModel.Buyer.Id;
+        var bookId = tradeModel.BookId;
+        var bookOfferId = tradeModel.BookOfferId;
+        var ownerId = tradeModel.OwnerId;
+        var buyerId = tradeModel.BuyerId;
 
-        var book = booksRepository.GetBookById(bookId) ??
+        var book = booksRepository.GetBookFullProfileById(bookId) ??
             throw new EntityNotFoundException($"Book {bookId} not found");
 
-        var bookOffer = booksRepository.GetBookById(bookOfferId) ??
+        var bookOffer = booksRepository.GetBookFullProfileById(bookOfferId) ??
             throw new EntityNotFoundException($"Book to offer {bookOfferId} not found");
 
-        var buyer = usersRepository.GetUserById(buyerId) ??
+        var buyer = usersRepository.GetUserFullProfileById(buyerId) ??
             throw new EntityNotFoundException($"User buyer {buyerId} not found");
 
-        var owner = usersRepository.GetUserById(ownerId) ??
+        var owner = usersRepository.GetUserFullProfileById(ownerId) ??
             throw new EntityNotFoundException($"User owner {ownerId} not found");
+
+        CheckOwnership(book, owner);
+        CheckOwnership(bookOffer, buyer);
 
         var trade = new TradeRequest
         {
@@ -47,6 +49,12 @@ public class TradesService(ITradesRepository tradesRepository,
         return tradeId;
     }
 
+    private void CheckOwnership(Book book, User user)
+    {
+        if (book.Users.LastOrDefault().Id != user.Id)
+            throw new EntityConflictException($"User {user.Id} no own book {book.Id}");
+    }
+
     public void UpdateTradeStatus(Guid tradeId, TradeRequestStatus status)
     {
         var trade = tradesRepository.GetTradeById(tradeId) ??
@@ -59,4 +67,9 @@ public class TradesService(ITradesRepository tradesRepository,
             => mapper.Map<TradeModel>(tradesRepository.GetTradeById(tradeId)) ??
                 throw new EntityNotFoundException($"Trade {tradeId} was not found");
 
+    public ICollection<TradeModel> GetTradesByUserId(Guid userId)
+            => mapper.Map<List<TradeModel>>(tradesRepository.GetTradesByUserId(userId));
+
+    public ICollection<TradeModel> GetTradesByBookId(Guid bookId)
+            => mapper.Map<List<TradeModel>>(tradesRepository.GetTradesByBookId(bookId));
 }

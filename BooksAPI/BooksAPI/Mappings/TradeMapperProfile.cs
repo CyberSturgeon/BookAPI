@@ -9,7 +9,11 @@ public class TradeMapperProfile: Profile
 {
     public TradeMapperProfile()
     {
-        CreateMap<TradeModel, TradeRequestResponse>();
-        CreateMap<TradeRequestRequest, TradeModel>();
+        CreateMap<TradeModel, TradeRequestResponse>()
+            .ForMember(t => t.BookOffer, opt => opt.MapFrom(tm => tm.BookOffer))
+            .ForMember(t => t.Book, opt => opt.MapFrom(tm => tm.Book))
+            .ForMember(t => t.Owner, opt => opt.MapFrom(tm => tm.Owner))
+            .ForMember(t => t.Buyer, opt => opt.MapFrom(tm => tm.Buyer));
+        CreateMap<TradeRequestRequest, TradeRequestModel>();
     }
 }

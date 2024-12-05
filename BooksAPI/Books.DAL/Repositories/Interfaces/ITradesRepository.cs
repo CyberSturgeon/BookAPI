@@ -11,8 +11,7 @@ namespace Books.DAL.Repositories.Interfaces
         TradeRequest? GetFullTradeById(Guid id);
         TradeRequest? GetTradeById(Guid id);
         ICollection<TradeRequest>? GetTradesByBookId(Guid bookId);
-        ICollection<TradeRequest>? GetTradesByBuyerId(Guid buyerId);
-        ICollection<TradeRequest>? GetTradesByOwnerId(Guid ownerId);
+        ICollection<TradeRequest> GetTradesByUserId(Guid userId);
         void UpdateTrade(TradeRequest trade, TradeRequest newTrade);
         void UpdateTradeStatus(TradeRequest trade, TradeRequestStatus status);
     }

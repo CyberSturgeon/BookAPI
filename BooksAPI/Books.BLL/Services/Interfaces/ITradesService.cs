@@ -5,8 +5,10 @@ namespace Books.BLL.Services.Interfaces
 {
     public interface ITradesService
     {
-        Guid AddTradeToBook(TradeModel tradeModel);
+        Guid AddTradeToBook(TradeRequestModel tradeModel);
         void UpdateTradeStatus(Guid tradeId, TradeRequestStatus status);
         TradeModel GetTradeById(Guid tradeId);
+        ICollection<TradeModel> GetTradesByUserId(Guid userId);
+        ICollection<TradeModel> GetTradesByBookId(Guid bookId);
     }
 }

@@ -4,17 +4,21 @@ namespace Books.DAL.Repositories.Interfaces;
 
 public class BooksRepository(BooksContext context) : IBooksRepository
 {
-    public Book? GetBookById(Guid id) => context.Books
+    public Book? GetBookById(Guid id) 
+        => context.Books
             .FirstOrDefault(b => b.Id == id);
 
-    public Book? GetBookFullProfileById(Guid id) => context.Books
+    public Book? GetBookFullProfileById(Guid id)
+        => context.Books
             .Include(b => b.Users)
             .Include(b => b.TradeRequests)
             .FirstOrDefault(b => b.Id == id);
 
-    public ICollection<Book>? GetBooks() => context.Books.ToList();
+    public ICollection<Book>? GetBooks()
+        => context.Books.ToList();
 
-    public ICollection<Book>? GetBooksByFilter(BookFilter filter) => context.Books
+    public ICollection<Book>? GetBooksByFilter(BookFilter filter)
+        => context.Books
             .Where(b => string.IsNullOrEmpty(filter.Name) || 
                         b.Name == filter.Name &&
                         string.IsNullOrEmpty(filter.Author) ||

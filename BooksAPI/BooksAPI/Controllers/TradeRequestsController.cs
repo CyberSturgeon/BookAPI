@@ -14,12 +14,12 @@ public class TradeRequestsController(
         ITradesService tradesService,
         IMapper mapper) : Controller
 {
-    [HttpPost, AllowAnonymous]
-    public ActionResult<Guid> AddTradeRequest([FromBody] TradeRequestRequest request)
-    {
-        var addedRequestId = tradesService.AddTradeToBook(mapper.Map<TradeModel>(request));
-        return Ok(addedRequestId);
-    }
+    //    [HttpPost, AllowAnonymous]
+    //    public ActionResult<Guid> AddTradeRequest([FromBody] TradeRequestRequest request)
+    //    {
+    //        var addedRequestId = tradesService.AddTradeToBook(mapper.Map<TradeModel>(request));
+    //        return Ok(addedRequestId);
+    //    }
 
     [HttpGet("{id}"), AllowAnonymous]
     public ActionResult<TradeRequestResponse> GetTradeRequestById([FromRoute] Guid id)

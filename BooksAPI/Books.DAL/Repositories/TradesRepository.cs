@@ -10,23 +10,22 @@ public class TradesRepository(BooksContext context) : ITradesRepository
     public TradeRequest? GetTradeById(Guid id) => context.TradeRequests
             .FirstOrDefault(t => t.Id == id);
 
-    public TradeRequest? GetFullTradeById(Guid id) => context.TradeRequests
+    public TradeRequest? GetFullTradeById(Guid id) 
+        => context.TradeRequests
             .Include(t => t.Buyer)
             .Include(t => t.Owner)
             .Include(t => t.Book)
             .Include(t => t.BookOffer)
             .FirstOrDefault(t => t.Id == id);
 
-    public ICollection<TradeRequest>? GetTradesByOwnerId(Guid ownerId) => context.TradeRequests
-            .Where(t => t.Owner.Id == ownerId)
+    public ICollection<TradeRequest>? GetTradesByUserId(Guid userId)
+        => context.TradeRequests
+            .Where(t => t.Owner.Id == userId || t.Buyer.Id == userId)
             .ToList();
 
-    public ICollection<TradeRequest>? GetTradesByBuyerId(Guid buyerId) => context.TradeRequests
-            .Where(t => t.Buyer.Id == buyerId)
-            .ToList();
-
-    public ICollection<TradeRequest>? GetTradesByBookId(Guid bookId) => context.TradeRequests
-            .Where(t => t.Book.Id == bookId)
+    public ICollection<TradeRequest>? GetTradesByBookId(Guid bookId)
+        => context.TradeRequests
+            .Where(t => t.Book.Id == bookId || t.BookOffer.Id == bookId)
             .ToList();
 
     public void DeleteTrades(List<TradeRequest> trades)

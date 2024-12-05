@@ -1,10 +1,15 @@
-﻿using Books.Core;
-using BooksAPI.Models.Responses;
+﻿
 
-namespace BooksAPI.Models.Requests;
+using Books.Core;
 
-public class TradeRequestRequest
+namespace Books.BLL.Models;
+
+public class TradeRequestModel
 {
+    public Guid Id { get; set; }
+
+    public string? TradeDate { get; set; }
+
     public Guid BookId { get; set; }
 
     public Guid BookOfferId { get; set; }
