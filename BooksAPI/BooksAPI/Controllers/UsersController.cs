@@ -15,13 +15,11 @@ namespace BooksAPI.Controllers;
 [Authorize]
 public class UsersController : Controller
 {
-    private IUsersService _usersService;
-
-    private IBooksService _booksService;
+    private IUsersService _service;
 
     private readonly Mapper _mapper;
 
-    public UsersController()
+    public UsersController(IUsersService usersService)
     {
         var config = new MapperConfiguration(
                 cfg =>
@@ -31,20 +29,14 @@ public class UsersController : Controller
                 });
         _mapper = new Mapper(config);
 
-        _usersService = new UsersService();
-        _booksService = new BooksService();
+        _service = usersService;
     }
 
     [HttpPost, AllowAnonymous]
     public ActionResult<Guid> Register([FromBody] RegisterUserRequest request)
     {
-        if (request is null)
-        {
-            return BadRequest("The registry request is bad.");
-        }
-
         var userToCreate = _mapper.Map<CreateUserModel>(request);
-        var addedUserId = _usersService.AddUser(userToCreate);
+        var addedUserId = _service.AddUser(userToCreate);
 
         return Ok(addedUserId);
     }
@@ -58,7 +50,7 @@ public class UsersController : Controller
             return BadRequest("The login request is bad.");
         }
 
-        var token = _usersService.VerifyUser(request.Email, request.Password);
+        var token = _service.VerifyUser(request.Email, request.Password);
 
         return Ok(new AuthenticatedResponse { Token = token });
     }
@@ -70,11 +62,10 @@ public class UsersController : Controller
         return Ok(tradeRequests);
     }
 
-    [HttpGet("{userId}/books"), AllowAnonymous]
+    [HttpGet("{id}/books"), AllowAnonymous]
     public ActionResult<List<BookShortResponse>> GetBooksByUserId([FromRoute] Guid userId)
     {
-        var books = _mapper.Map<List<BookShortResponse>>(_usersService.GetUserById(userId).Books);
-
+        var books = new List<BookShortResponse>();//filter by user id
         return Ok(books);
     }
 
@@ -82,7 +73,7 @@ public class UsersController : Controller
     [HttpGet("{id}"), AllowAnonymous]
     public ActionResult<UserFullResponse> GetUserById([FromRoute] Guid id)
     {
-        var user = _mapper.Map<UserFullResponse>(_usersService.GetUserById(id));
+        var user = _mapper.Map<UserFullResponse>(_service.GetUserById(id));
 
         return Ok(user);
     }
@@ -90,7 +81,7 @@ public class UsersController : Controller
     [HttpGet, AllowAnonymous]
     public ActionResult<ICollection<UserResponse>> GetUsers()
     {
-        var users = _mapper.Map<List<UserResponse>>(_usersService.GetAllUsers());    
+        var users = _mapper.Map<List<UserResponse>>(_service.GetAllUsers());    
 
         return Ok(users);
     }
@@ -99,7 +90,7 @@ public class UsersController : Controller
     public IActionResult UpdateUser([FromRoute] Guid id, [FromBody] UpdateUserRequest request)
     {
         var userToUpdate = _mapper.Map<UpdateUserModel>(request);
-        _usersService.UpdateUser(id, userToUpdate);
+        _service.UpdateUser(id, userToUpdate);
 
         return NoContent();
     }
@@ -107,7 +98,7 @@ public class UsersController : Controller
     [HttpDelete("{id}"), AllowAnonymous]
     public IActionResult DeleteUser([FromRoute] Guid id)
     {
-        _usersService.DeleteUser(id);
+        _service.DeleteUser(id);
 
         return NoContent();
     }

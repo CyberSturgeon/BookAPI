@@ -15,6 +15,5 @@ public class BookMapperProfile : Profile
         CreateMap<CreateBookModel, Book>();
         CreateMap<UpdateBookModel, Book>();
         CreateMap<BookFilterModel, BookFilter>();
-
     }
 }

@@ -22,18 +22,17 @@ public class UsersService : IUsersService
 
     private readonly Mapper _mapper;
 
-    public UsersService()
+    public UsersService(IBooksRepository booksRepository, IUsersRepository usersRepository)
     {
-        _usersRepository = new UsersRepository();
+        _usersRepository = usersRepository;
 
-        _booksRepository = new BooksRepository();
+        _booksRepository = booksRepository;
 
         var config = new MapperConfiguration(
                 cfg =>
                 {
                     cfg.AddProfile(new BookMapperProfile());
                     cfg.AddProfile(new UserMapperProfile());
-                    cfg.AddProfile(new TradeMapperProfile());
                 });
         _mapper = new Mapper(config);
     }
