@@ -10,6 +10,7 @@ namespace Books.BLL.Services;
 public class BooksService(
         IBooksRepository booksRepository,
         IUsersRepository usersRepository,
+        ITradesRepository tradesRepository,
         IMapper mapper
     ) : IBooksService
 {
@@ -29,19 +30,20 @@ public class BooksService(
 
     public BookFullModel GetBookById(Guid id)
     {
-        return mapper.Map<BookFullModel>(booksRepository.GetBookFullProfileById(id)) ??
-            throw new EntityNotFoundException($"Book {id} not found"); ;
+        var bookModel = mapper.Map<BookFullModel>(booksRepository.GetBookFullProfileById(id)) ??
+            throw new EntityNotFoundException($"Book {id} not found");
+
+        var tradeModels = mapper.Map<List<TradeModel>>(tradesRepository.GetTradesByBookId(bookModel.Id));
+        bookModel.TradeRequests = tradeModels;
+
+        return bookModel;
     }
 
     public ICollection<BookModel> GetAllBooks()
-    {
-        return mapper.Map<List<BookModel>>(booksRepository.GetBooks());
-    }
+            => mapper.Map<List<BookModel>>(booksRepository.GetBooks());
 
     public ICollection<BookModel> GetBooksByFilter(BookFilterModel filter)
-    {
-        return mapper.Map<List<BookModel>>(booksRepository.GetBooksByFilter(mapper.Map<BookFilter>(filter)));
-    }
+            => mapper.Map<List<BookModel>>(booksRepository.GetBooksByFilter(mapper.Map<BookFilter>(filter)));
 
     public void DeleteBook(Guid id)
     {

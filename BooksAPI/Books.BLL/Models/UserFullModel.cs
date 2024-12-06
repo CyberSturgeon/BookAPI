@@ -15,5 +15,5 @@ public class UserFullModel
 
     public ICollection<BookModel> Books { get; set; } = [];
 
-    public ICollection<TradeRequest> Trades { get; set; } = [];
+    public ICollection<TradeModel> Trades { get; set; } = [];
 }

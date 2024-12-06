@@ -10,7 +10,8 @@ public class BooksRepository(BooksContext context) : IBooksRepository
 
     public Book? GetBookFullProfileById(Guid id)
         => context.Books
-            .Include(b => b.Users)
+            .Include(b => b.Users).ThenInclude(u => u.Books)
+            .Include(b => b.Users).ThenInclude(u => u.Trades)
             .Include(b => b.TradeRequests)
             .FirstOrDefault(b => b.Id == id);
 

@@ -14,9 +14,12 @@ using System.Text;
 
 namespace Books.BLL.Services;
 
-public class UsersService(IBooksRepository booksRepository,
+public class UsersService(
+        IBooksRepository booksRepository,
         IUsersRepository usersRepository,
-        IMapper mapper) : IUsersService
+        ITradesRepository tradesRepository,
+        IMapper mapper) 
+        : IUsersService
 {
     public string VerifyUser(string email, string password)
     {
@@ -32,8 +35,13 @@ public class UsersService(IBooksRepository booksRepository,
 
     public UserFullModel GetUserById(Guid id)
     {
-        return mapper.Map<UserFullModel>(usersRepository.GetUserFullProfileById(id)) ??
+        var userModel = mapper.Map<UserFullModel>(usersRepository.GetUserFullProfileById(id)) ??
             throw new EntityNotFoundException($"User {id} not found");
+
+        var tradeModels = mapper.Map<List<TradeModel>>(tradesRepository.GetTradesByUserId(id));
+        userModel.Trades = tradeModels;
+
+        return userModel;
     }
 
     public ICollection<UserModel> GetAllUsers()

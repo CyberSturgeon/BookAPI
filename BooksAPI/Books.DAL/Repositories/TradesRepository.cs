@@ -2,6 +2,7 @@
 using Books.DAL.DTOs;
 using Books.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace Books.DAL.Repositories;
 
@@ -18,14 +19,22 @@ public class TradesRepository(BooksContext context) : ITradesRepository
             .Include(t => t.BookOffer)
             .FirstOrDefault(t => t.Id == id);
 
-    public ICollection<TradeRequest>? GetTradesByUserId(Guid userId)
+    public ICollection<TradeRequest> GetTradesByUserId(Guid userId)
         => context.TradeRequests
             .Where(t => t.Owner.Id == userId || t.Buyer.Id == userId)
+            .Include(t => t.Buyer)
+            .Include(t => t.Owner)
+            .Include(t => t.Book)
+            .Include(t => t.BookOffer)
             .ToList();
 
-    public ICollection<TradeRequest>? GetTradesByBookId(Guid bookId)
+    public ICollection<TradeRequest> GetTradesByBookId(Guid bookId)
         => context.TradeRequests
             .Where(t => t.Book.Id == bookId || t.BookOffer.Id == bookId)
+            .Include(t => t.Buyer)
+            .Include(t => t.Owner)
+            .Include(t => t.Book)
+            .Include(t => t.BookOffer)
             .ToList();
 
     public void DeleteTrades(List<TradeRequest> trades)
