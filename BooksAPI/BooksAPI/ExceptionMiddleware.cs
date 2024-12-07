@@ -1,4 +1,5 @@
 ﻿using Books.BLL.Exceptions;
+using BooksAPI.Configuration;
 using System.Net;
 
 namespace BooksAPI;
