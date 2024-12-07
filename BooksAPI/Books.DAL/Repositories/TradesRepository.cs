@@ -48,11 +48,10 @@ public class TradesRepository(BooksContext context) : ITradesRepository
         context.SaveChanges();
     }
 
-    public void UpdateTrade(TradeRequest trade, TradeRequest newTrade)
+    public void UpdateTrade(TradeRequest trade, string tradeDate, TradeRequestStatus tradeStatus)
     {
-        trade.Owner = newTrade.Owner;
-        trade.Buyer = newTrade.Buyer;
-        trade.Book = newTrade.Book;
+        trade.TradeDate = tradeDate;
+        trade.TradeStatus = tradeStatus;
 
         context.SaveChanges();
     }

@@ -12,7 +12,7 @@ namespace Books.DAL.Repositories.Interfaces
         TradeRequest? GetTradeById(Guid id);
         ICollection<TradeRequest> GetTradesByBookId(Guid bookId);
         ICollection<TradeRequest> GetTradesByUserId(Guid userId);
-        void UpdateTrade(TradeRequest trade, TradeRequest newTrade);
+        void UpdateTrade(TradeRequest trade, string tradeDate, TradeRequestStatus tradeStatus);
         void UpdateTradeStatus(TradeRequest trade, TradeRequestStatus status);
     }
 }

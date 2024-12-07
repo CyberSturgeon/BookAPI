@@ -10,5 +10,6 @@ namespace Books.BLL.Services.Interfaces
         TradeModel GetTradeById(Guid tradeId);
         ICollection<TradeModel> GetTradesByUserId(Guid userId);
         ICollection<TradeModel> GetTradesByBookId(Guid bookId);
+        void UpdateTrade(Guid tradeId, TradeRequestStatus status);
     }
 }

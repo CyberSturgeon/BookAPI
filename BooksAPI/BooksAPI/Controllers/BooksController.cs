@@ -45,13 +45,6 @@ public class BooksController(
         return Ok(tradeRequests);
     }
 
-    [HttpPost("{id}/trade"), AllowAnonymous]
-    public ActionResult<Guid> AddTradeToBook([FromBody]TradeRequestRequest request)
-    {
-        var tradeId = tradesService.AddTradeToBook(mapper.Map<TradeRequestModel>(request));
-        return Ok(tradeId);
-    }
-
     [HttpDelete("{id}/trades")]
     public IActionResult DeactivateRequest([FromRoute] Guid id)
     {

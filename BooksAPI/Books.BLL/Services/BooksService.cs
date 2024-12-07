@@ -63,7 +63,7 @@ public class BooksService(
         booksRepository.UpdateBook(book, newBook);
     }
 
-    public void AddUserToBook(Guid bookId, Guid userId)
+    public void AddUserToBook(Guid userId, Guid bookId)
     {
         var book = booksRepository.GetBookFullProfileById(bookId) ??
             throw new EntityNotFoundException($"Book {bookId} not found");

@@ -49,22 +49,25 @@ public class TradesService(ITradesRepository tradesRepository,
         return tradeId;
     }
 
-    private void CheckOwnership(Book book, User user)
+    public void UpdateTrade(Guid tradeId, TradeRequestStatus status)
     {
-        if (book.Users.LastOrDefault().Id != user.Id)
-            throw new EntityConflictException($"User {user.Id} no own book {book.Id}");
+        var trade = tradesRepository.GetFullTradeById(tradeId) ??
+            throw new EntityNotFoundException($"Trade {tradeId} was not found");
+        var tradeDate = DateTime.Now.ToString();
+
+        tradesRepository.UpdateTrade(trade, tradeDate, status);
     }
 
     public void UpdateTradeStatus(Guid tradeId, TradeRequestStatus status)
     {
-        var trade = tradesRepository.GetTradeById(tradeId) ??
+        var trade = tradesRepository.GetFullTradeById(tradeId) ??
             throw new EntityNotFoundException($"Trade {tradeId} was not found");
 
         tradesRepository.UpdateTradeStatus(trade, status);
     }
 
     public TradeModel GetTradeById(Guid tradeId) 
-            => mapper.Map<TradeModel>(tradesRepository.GetTradeById(tradeId)) ??
+            => mapper.Map<TradeModel>(tradesRepository.GetFullTradeById(tradeId)) ??
                 throw new EntityNotFoundException($"Trade {tradeId} was not found");
 
     public ICollection<TradeModel> GetTradesByUserId(Guid userId)
@@ -72,4 +75,10 @@ public class TradesService(ITradesRepository tradesRepository,
 
     public ICollection<TradeModel> GetTradesByBookId(Guid bookId)
             => mapper.Map<List<TradeModel>>(tradesRepository.GetTradesByBookId(bookId));
+    
+    private void CheckOwnership(Book book, User user)
+    {
+        if (book.Users.LastOrDefault().Id != user.Id)
+            throw new EntityConflictException($"User {user.Id} no own book {book.Id}");
+    }
 }
