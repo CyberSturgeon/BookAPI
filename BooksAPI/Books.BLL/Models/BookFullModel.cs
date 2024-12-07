@@ -12,7 +12,7 @@ public class BookFullModel
 
     public string Genre { get; set; }
 
-    public ICollection<TradeRequest> TradeRequests { get; set; } = [];
+    public ICollection<TradeModel> TradeRequests { get; set; } = [];
 
     public ICollection<UserModel> Users { get; set; } = [];
 }

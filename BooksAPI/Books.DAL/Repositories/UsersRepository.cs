@@ -6,21 +6,26 @@ namespace Books.DAL.Repositories;
 
 public class UsersRepository(BooksContext context) : IUsersRepository
 {
-    public User? VerifyUser(string email, string password) => context.Users
+    public User? VerifyUser(string email, string password)
+        => context.Users
             .FirstOrDefault(u => u.Email == email && u.Password == password);
 
-    public User? GetUserByEmail(string email) => context.Users
+    public User? GetUserByEmail(string email)
+        => context.Users
             .FirstOrDefault(u => u.Email == email);
 
-    public User? GetUserById(Guid id) => context.Users
+    public User? GetUserById(Guid id)
+        => context.Users
             .FirstOrDefault(u => u.Id == id);
 
-    public User? GetUserFullProfileById(Guid id) => context.Users
+    public User? GetUserFullProfileById(Guid id)
+        => context.Users
             .Include(u => u.Books)
             .Include(u => u.Trades)
             .FirstOrDefault(u => u.Id == id);
 
-    public ICollection<User>? GetUsers() => context.Users.ToList();
+    public ICollection<User>? GetUsers()
+        => context.Users.ToList();
 
     public void DeleteUser(User user)
     {

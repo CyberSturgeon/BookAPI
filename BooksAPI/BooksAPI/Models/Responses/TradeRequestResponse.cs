@@ -4,6 +4,8 @@ namespace BooksAPI.Models.Responses;
 
 public class TradeRequestResponse
 {
+    public Guid Id { get; set; }
+
     public BookShortResponse Book { get; set; }
 
     public BookShortResponse BookOffer { get; set; }

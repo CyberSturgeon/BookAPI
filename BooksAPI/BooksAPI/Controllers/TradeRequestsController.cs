@@ -5,6 +5,7 @@ using BooksAPI.Models.Responses;
 using Books.BLL.Services.Interfaces;
 using AutoMapper;
 using Books.BLL.Models;
+using Books.Core;
 
 namespace BooksAPI.Controllers;
 [ApiController]
@@ -12,13 +13,16 @@ namespace BooksAPI.Controllers;
 [Authorize]
 public class TradeRequestsController(
         ITradesService tradesService,
+        IUsersService usersService,
+        IBooksService booksService,
         IMapper mapper) : Controller
 {
-    [HttpPost, AllowAnonymous]
-    public ActionResult<Guid> AddTradeRequest([FromBody] TradeRequestRequest request)
+
+    [HttpPost(), AllowAnonymous]
+    public ActionResult<Guid> AddTradeToBook([FromBody] TradeRequestRequest request)
     {
-        var addedRequestId = tradesService.AddTradeToBook(mapper.Map<TradeModel>(request));
-        return Ok(addedRequestId);
+        var tradeId = tradesService.AddTradeToBook(mapper.Map<TradeRequestModel>(request));
+        return Ok(tradeId);
     }
 
     [HttpGet("{id}"), AllowAnonymous]
@@ -28,15 +32,31 @@ public class TradeRequestsController(
         return Ok(tradeRequest);
     }
 
-    [HttpPatch("{id}")]
-    public IActionResult UpdateTradeRequest([FromRoute] Guid id, [FromBody] string status)
+    [HttpPatch("{id}/status"), AllowAnonymous]
+    public IActionResult UpdateTradeRequestStatus([FromRoute] Guid id, [FromBody] TradeRequestStatus status)
     {
+        var trade = tradesService.GetTradeById(id);
+
+        if (trade.TradeStatus != TradeRequestStatus.Accepted)
+        {
+            if (status == TradeRequestStatus.Accepted)
+            {
+                booksService.AddUserToBook(trade.Buyer.Id, trade.Book.Id);
+                booksService.AddUserToBook(trade.Owner.Id, trade.BookOffer.Id);
+
+                tradesService.UpdateTrade(id, status);
+            }
+            else
+            {
+                tradesService.UpdateTradeStatus(id, status);
+            }
+        }
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
-    public IActionResult DeleteTradeRequest([FromRoute] Guid id)
-    {
-        return NoContent();
-    }
+    //[HttpDelete("{id}")]
+    //public IActionResult DeleteTradeRequest([FromRoute] Guid id)
+    //{
+    //    return NoContent();
+    //}
 }

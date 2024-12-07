@@ -12,6 +12,7 @@ public class UserMapperProfile:Profile
         CreateMap<RegisterUserRequest, CreateUserModel>();
         CreateMap<UpdateUserRequest, UpdateUserModel>();    
         CreateMap<UserModel, UserResponse>();
-        CreateMap<UserFullModel, UserFullResponse>();   
+        CreateMap<UserFullModel, UserFullResponse>()
+            .ForMember(ufr => ufr.TradeRequests, opt => opt.MapFrom(ufm => ufm.Trades));   
     }
 }

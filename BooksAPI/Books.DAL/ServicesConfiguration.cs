@@ -13,5 +13,6 @@ public static class ServicesConfiguration
         services.AddDbContext<BooksContext>(options => options.UseNpgsql(configuration.GetConnectionString("BooksDbConnection")));
         services.AddScoped<IBooksRepository, BooksRepository>();
         services.AddScoped<IUsersRepository, UsersRepository>();
+        services.AddScoped<ITradesRepository, TradesRepository>();
     }
 }

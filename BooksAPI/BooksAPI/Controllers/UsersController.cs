@@ -15,6 +15,7 @@ namespace BooksAPI.Controllers;
 [Authorize]
 public class UsersController(
         IUsersService usersService,
+        ITradesService tradesService,
         IMapper mapper) : Controller
 {
 
@@ -41,20 +42,12 @@ public class UsersController(
         return Ok(new AuthenticatedResponse { Token = token });
     }
 
-    [HttpGet("{id}/trades")]
+    [HttpGet("{id}/trades"), AllowAnonymous]
     public ActionResult<List<TradeRequestResponse>> GetTradeRequestsByUserId([FromRoute] Guid id)
     {
-        var tradeRequests = new List<TradeRequestResponse>();
+        var tradeRequests = mapper.Map<List<TradeRequestResponse>>(tradesService.GetTradesByUserId(id));
         return Ok(tradeRequests);
     }
-
-    [HttpGet("{id}/books"), AllowAnonymous]
-    public ActionResult<List<BookShortResponse>> GetBooksByUserId([FromRoute] Guid userId)
-    {
-        var books = new List<BookShortResponse>();//filter by user id
-        return Ok(books);
-    }
-
 
     [HttpGet("{id}"), AllowAnonymous]
     public ActionResult<UserFullResponse> GetUserById([FromRoute] Guid id)
@@ -89,9 +82,16 @@ public class UsersController(
         return NoContent();
     }
 
-    [HttpPatch("{id}/deactivate")]
-    public IActionResult DeactivateUser([FromRoute] Guid id)
-    {
-        return NoContent();
-    }
+    //[HttpPatch("{id}/deactivate")]
+    //public IActionResult DeactivateUser([FromRoute] Guid id)
+    //{
+    //    return NoContent();
+    //}
+
+    //[HttpGet("{id}/books"), AllowAnonymous]
+    //public ActionResult<List<BookShortResponse>> GetBooksByUserId([FromRoute] Guid userId)
+    //{
+    //    var books = new List<BookShortResponse>();//filter by user id
+    //    return Ok(books);
+    //}
 }

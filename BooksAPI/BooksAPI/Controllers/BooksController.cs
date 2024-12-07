@@ -13,6 +13,7 @@ namespace BooksAPI.Controllers;
 [Route("api/books")]
 public class BooksController(
         IBooksService booksService,
+        ITradesService tradesService,
         IMapper mapper
     ) : Controller
 {
@@ -37,10 +38,10 @@ public class BooksController(
         return Ok(books);
     }
 
-    [HttpGet("{id}/trades")]
+    [HttpGet("{id}/trades"), AllowAnonymous]
     public ActionResult<List<TradeRequestResponse>> GetTradeRequestsByBookId([FromRoute] Guid id)
     {
-        var tradeRequests = new List<TradeRequestResponse>();
+        var tradeRequests = mapper.Map<List<TradeRequestResponse>>(tradesService.GetTradesByBookId(id));
         return Ok(tradeRequests);
     }
 
