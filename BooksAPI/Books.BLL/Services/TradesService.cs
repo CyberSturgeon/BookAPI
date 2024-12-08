@@ -49,11 +49,12 @@ public class TradesService(ITradesRepository tradesRepository,
         return tradeId;
     }
 
-    public void UpdateTrade(Guid tradeId, TradeRequestStatus status)
+    public void AcceptTrade(Guid tradeId)
     {
         var trade = tradesRepository.GetFullTradeById(tradeId) ??
             throw new EntityNotFoundException($"Trade {tradeId} was not found");
         var tradeDate = DateTime.Now.ToString();
+        var status = TradeRequestStatus.Accepted;
 
         tradesRepository.UpdateTrade(trade, tradeDate, status);
     }
