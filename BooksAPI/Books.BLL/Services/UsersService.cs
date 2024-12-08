@@ -21,17 +21,13 @@ public class UsersService(
         IMapper mapper) 
         : IUsersService
 {
-    public string VerifyUser(string email, string password)
-    {
-        return LogIn(mapper.Map<UserModel>(usersRepository.VerifyUser(email, password))) ??
-            throw new WrongLoginException($"Wrong Email or password, try again");
-    }
+    public string VerifyUser(string email, string password) 
+            => LogIn(mapper.Map<UserModel>(usersRepository.VerifyUser(email, password))) ??
+                throw new WrongLoginException($"Wrong Email or password, try again");
 
     public UserModel GetUserByEmail(string email)
-    {
-        return mapper.Map<UserModel>(usersRepository.GetUserByEmail(email)) ??
-            throw new EntityNotFoundException($"User {email} not found");
-    }
+            => mapper.Map<UserModel>(usersRepository.GetUserByEmail(email)) ??
+                throw new EntityNotFoundException($"User {email} not found");
 
     public UserFullModel GetUserById(Guid id)
     {
@@ -45,9 +41,7 @@ public class UsersService(
     }
 
     public ICollection<UserModel> GetAllUsers()
-    {
-        return mapper.Map<List<UserModel>>(usersRepository.GetUsers());
-    }
+            => mapper.Map<List<UserModel>>(usersRepository.GetUsers());
 
     public void DeleteUser(Guid id)
     {
