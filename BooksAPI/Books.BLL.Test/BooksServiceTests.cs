@@ -6,7 +6,6 @@ using Books.BLL.Services;
 using Books.DAL.DTOs;
 using Books.DAL.Repositories.Interfaces;
 using Moq;
-using System.Net;
 
 namespace Books.BLL.Test;
 
@@ -66,10 +65,9 @@ public class BooksServiceTests
         _usersRepositoryMock.Setup(t => t.GetUserById(userId)).Returns(user);
         _booksRepositoryMock.Setup(t => t.AddBook(book, user)).Returns(bookId);
 
-        _sut.AddBook(bookModel);
+        var addedBookId = _sut.AddBook(bookModel);
 
         _booksRepositoryMock.Verify(t => t.AddBook(It.IsAny<Book>(), It.IsAny<User>()), Times.Once);
-
     }
 
     [Fact]
@@ -87,12 +85,15 @@ public class BooksServiceTests
     public void GetBookById_ExistsBookId_GetBookSuccess()
     {
         var bookId = Guid.NewGuid();
-        _booksRepositoryMock.Setup(t => t.GetBookFullProfileById(bookId)).Returns(new Book { Id = bookId});
+        var book = new Book { Id = bookId };
+        var bookModel = _mapper.Map<BookFullModel>(book);
+        _booksRepositoryMock.Setup(t => t.GetBookFullProfileById(bookId)).Returns(book);
 
-        _sut.GetBookById(bookId);
+        var bookModelResponce = _sut.GetBookById(bookId);
         
         _booksRepositoryMock.Verify(t => t.GetBookFullProfileById(bookId), Times.Once);   
         _tradesRepositoryMock.Verify(t => t.GetTradesByBookId(bookId), Times.Once);
+        Assert.Equivalent(bookModel, bookModelResponce);
     }
 
     [Fact]
@@ -174,6 +175,21 @@ public class BooksServiceTests
             () => _sut.AddUserToBook(userId, bookId));
 
         Assert.Equal(msg, ex.Message);
+    }
 
+    [Fact]
+    public void AddUserToBook_ExistsBookExistsUser_AddSuccesfull()
+    {
+        var bookId = Guid.NewGuid();
+        var userId = Guid.NewGuid();
+        var user = new User { Id = userId };
+        var book = new Book { Id = bookId };
+
+        _booksRepositoryMock.Setup(t => t.GetBookFullProfileById(bookId)).Returns(book);
+        _usersRepositoryMock.Setup(t => t.GetUserById(userId)).Returns(user);
+
+        _sut.AddUserToBook(userId, bookId);
+
+        _booksRepositoryMock.Verify(t => t.AddUserToBook(book, user), Times.Once);
     }
 }

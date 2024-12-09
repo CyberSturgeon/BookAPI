@@ -13,7 +13,6 @@ public class BookMapperProfile : Profile
         CreateMap<UpdateBookRequest, UpdateBookModel>();
         CreateMap<BookModel, BookShortResponse>();
         CreateMap<BookFullModel, BookFullResponse>()
-            .ForMember(bfr => bfr.Owner, opt => opt.MapFrom(bfm => bfm.Users.LastOrDefault()))
             .ForMember(bfr => bfr.TradeRequests, opt => opt.MapFrom(bfm => bfm.TradeRequests));
         CreateMap<SearchBookRequest, BookFilterModel>();
     }

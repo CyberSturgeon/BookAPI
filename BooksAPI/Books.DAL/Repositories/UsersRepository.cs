@@ -33,6 +33,13 @@ public class UsersRepository(BooksContext context) : IUsersRepository
         context.SaveChanges();
     }
 
+    public void RemoveBookFromUser(User user, Book book)
+    {
+        user.Books.Remove(book);
+
+        context.SaveChanges();
+    }
+
     public void UpdateUser(User user, User newUser)
     {
         user.Name = newUser.Name;
