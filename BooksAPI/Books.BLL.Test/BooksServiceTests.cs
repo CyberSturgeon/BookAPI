@@ -6,6 +6,7 @@ using Books.BLL.Services;
 using Books.DAL.DTOs;
 using Books.DAL.Repositories.Interfaces;
 using Moq;
+using System.Net;
 
 namespace Books.BLL.Test;
 
@@ -117,4 +118,62 @@ public class BooksServiceTests
         _booksRepositoryMock.Verify(t => t.DeleteBook(book), Times.Once);
     }
 
+    [Fact]
+    public void UpdateBook_NonExistsBookId_EntityNotFoundExceptionTrown()
+    {
+        var bookId = Guid.NewGuid();
+        var msg = $"Book {bookId} not found";
+
+        var ex = Assert.Throws<EntityNotFoundException>(
+            () => _sut.UpdateBook(bookId, new UpdateBookModel()));
+
+        Assert.Equal(msg, ex.Message);
+    }
+
+    [Fact]
+    public void UpdateBook_ExistsBookId_UpdateBookSuccess()
+    {
+        var bookId = Guid.NewGuid();
+        var bookModel = new UpdateBookModel { Author = "test" };
+        var book = new Book { Id = bookId };
+        var newBook = _mapper.Map<Book>(bookModel);
+
+        _booksRepositoryMock.Setup(t => t.GetBookById(bookId)).Returns(book);
+
+
+        _sut.UpdateBook(bookId, bookModel);
+
+        _booksRepositoryMock.Verify(t => t.UpdateBook(It.IsAny<Book>(), It.IsAny<Book>()), Times.Once);
+    }
+
+    [Fact]
+    public void AddUserToBook_NonExistsBookExistsUser_EntityNotFoundExceptionTrown()
+    {
+        var bookId = Guid.NewGuid();
+        var userId = Guid.NewGuid();
+        var msg = $"Book {bookId} not found";
+
+        _usersRepositoryMock.Setup(t => t.GetUserById(userId)).Returns(new User { Id = userId});
+
+        var ex = Assert.Throws<EntityNotFoundException>(
+            () => _sut.AddUserToBook(userId, bookId));
+
+        Assert.Equal(msg, ex.Message);
+    }
+
+    [Fact]
+    public void AddUserToBook_ExistsBookNonExistsUser_EntityNotFoundExceptionTrown()
+    {
+        var bookId = Guid.NewGuid();
+        var userId = Guid.NewGuid();
+        var msg = $"User {userId} not found";
+
+        _booksRepositoryMock.Setup(t => t.GetBookFullProfileById(bookId)).Returns(new Book { Id = bookId });
+
+        var ex = Assert.Throws<EntityNotFoundException>(
+            () => _sut.AddUserToBook(userId, bookId));
+
+        Assert.Equal(msg, ex.Message);
+
+    }
 }

@@ -1,6 +1,4 @@
 ﻿
-using Books.DAL.DTOs;
-
 namespace Books.BLL.Models;
 
 public class UpdateBookModel
