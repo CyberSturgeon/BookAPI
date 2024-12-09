@@ -44,7 +44,10 @@ public class TradeRequestsController(
                 booksService.AddUserToBook(trade.Buyer.Id, trade.Book.Id);
                 booksService.AddUserToBook(trade.Owner.Id, trade.BookOffer.Id);
 
-                tradesService.UpdateTrade(id, status);
+                usersService.RemoveBookFromUser(trade.Buyer.Id, trade.BookOffer.Id);
+                usersService.RemoveBookFromUser(trade.Owner.Id, trade.Book.Id);
+
+                tradesService.AcceptTrade(id);
             }
             else
             {

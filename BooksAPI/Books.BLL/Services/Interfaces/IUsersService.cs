@@ -11,5 +11,6 @@ namespace Books.BLL.Services.Interfaces
         UserFullModel GetUserById(Guid id);
         void UpdateUser(Guid id, UpdateUserModel newUser);
         string VerifyUser(string email, string password);
+        void RemoveBookFromUser(Guid userId, Guid bookId);
     }
 }

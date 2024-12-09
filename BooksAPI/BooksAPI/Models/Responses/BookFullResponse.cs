@@ -10,8 +10,6 @@ public class BookFullResponse
 
     public string Genre { get; set; }
 
-    public UserResponse Owner { get; set; }
-
     public ICollection<UserResponse> Users { get; set; }
 
     public ICollection<TradeRequestResponse> TradeRequests { get; set; }

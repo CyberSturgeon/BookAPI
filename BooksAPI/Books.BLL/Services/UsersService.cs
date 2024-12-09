@@ -68,6 +68,17 @@ public class UsersService(
         usersRepository.UpdateUser(user, newUser);
     }
 
+    public void RemoveBookFromUser(Guid userId, Guid bookId)
+    {
+        var user = usersRepository.GetUserFullProfileById(userId) ??
+            throw new EntityNotFoundException($"User {userId} not found");
+
+        var book = booksRepository.GetBookFullProfileById(bookId) ??
+                throw new EntityNotFoundException($"User {bookId} not found");
+
+        usersRepository.RemoveBookFromUser(user, book);
+    }
+
     public Guid AddUser(CreateUserModel userModel)
     {
         var existsUser = usersRepository.GetUserByEmail(userModel.Email);

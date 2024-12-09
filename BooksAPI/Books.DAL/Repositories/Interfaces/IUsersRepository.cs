@@ -4,14 +4,15 @@ namespace Books.DAL.Repositories.Interfaces;
 
 public interface IUsersRepository
 {
-    public User? VerifyUser(string email, string password);
-    public User? GetUserByEmail(string email);
-    public User? GetUserById(Guid id);
-    public ICollection<User>? GetUsers();
-    public void AddBookToUser(Book book, User owner);
-    public void DeleteUser(User user);
-    public void UpdateUser(User user, User newUser);
-    public Guid AddUser(User user);
-    public User? GetUserFullProfileById(Guid id);
+    User? VerifyUser(string email, string password);
+    User? GetUserByEmail(string email);
+    User? GetUserById(Guid id);
+    ICollection<User>? GetUsers();
+    void AddBookToUser(Book book, User owner);
+    void DeleteUser(User user);
+    void UpdateUser(User user, User newUser);
+    Guid AddUser(User user);
+    User? GetUserFullProfileById(Guid id);
+    void RemoveBookFromUser(User user, Book book);
 
 }
