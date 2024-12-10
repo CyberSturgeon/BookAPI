@@ -45,12 +45,6 @@ public class BooksController(
         return Ok(tradeRequests);
     }
 
-    [HttpDelete("{id}/trades")]
-    public IActionResult DeactivateRequest([FromRoute] Guid id)
-    {
-        return NoContent();
-    }
-
     [HttpGet, AllowAnonymous]
     public ActionResult<List<BookShortResponse>> GetBooks()
     {
@@ -65,16 +59,24 @@ public class BooksController(
         return NoContent();
     }
 
-    [HttpDelete("{id}"), AllowAnonymous]
-    public IActionResult DeleteBook([FromRoute] Guid id)
-    {
-        booksService.DeleteBook(id);
-        return NoContent();
-    }
 
     [HttpPatch("{id}/deactivate")]
     public IActionResult DeactivateBook([FromRoute] Guid id)
     {
+        return NoContent();
+    }
+
+    [HttpDelete("{id}/trades")]
+    public IActionResult DeactivateRequest([FromRoute] Guid id)
+    {
+        return NoContent();
+    }
+
+
+    [HttpDelete("{id}"), AllowAnonymous]
+    public IActionResult DeleteBook([FromRoute] Guid id)
+    {
+        //booksService.DeleteBook(id);
         return NoContent();
     }
 }

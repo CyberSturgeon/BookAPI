@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using Books.BLL.Exceptions;
-using Books.BLL.Mappings;
 using Books.BLL.Models;
 using Books.BLL.Services.Interfaces;
 using Books.Core;
 using Books.DAL.DTOs;
-using Books.DAL.Repositories;
 using Books.DAL.Repositories.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

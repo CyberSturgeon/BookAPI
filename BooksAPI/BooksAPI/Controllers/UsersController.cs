@@ -77,21 +77,22 @@ public class UsersController(
     [HttpDelete("{id}"), AllowAnonymous]
     public IActionResult DeleteUser([FromRoute] Guid id)
     {
-        usersService.DeleteUser(id);
+        //usersService.DeleteUser(id);
 
         return NoContent();
     }
 
-    //[HttpPatch("{id}/deactivate")]
-    //public IActionResult DeactivateUser([FromRoute] Guid id)
-    //{
-    //    return NoContent();
-    //}
+    [HttpPatch("{id}/deactivate")]
+    public IActionResult DeactivateUser([FromRoute] Guid id)
+    {
+        return NoContent();
+    }
 
-    //[HttpGet("{id}/books"), AllowAnonymous]
-    //public ActionResult<List<BookShortResponse>> GetBooksByUserId([FromRoute] Guid userId)
-    //{
-    //    var books = new List<BookShortResponse>();//filter by user id
-    //    return Ok(books);
-    //}
+    [HttpGet("{id}/books"), AllowAnonymous]
+    public ActionResult<List<BookShortResponse>> GetBooksByUserId([FromRoute] Guid userId)
+    {
+        var books = new List<BookShortResponse>();//filter by user id
+        return Ok(books);
+    }
 }
+
