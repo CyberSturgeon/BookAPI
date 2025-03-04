@@ -6,6 +6,7 @@ using Books.BLL.Services;
 using Books.DAL.DTOs;
 using Books.DAL.Repositories.Interfaces;
 using Moq;
+using System.Net;
 
 
 namespace Books.BLL.Test;
@@ -64,7 +65,7 @@ public class UsersServiceTests
     }
 
     [Fact]
-    public void VerifyUser_GoodEmailGoodPassword_LoginSucess()
+    public void VerifyUser_GoodEmailGoodPassword_LoginSuccess()
     {
         var email = "yasha@lava.com";
         var msg = $"Wrong Email or password, try again";
@@ -116,7 +117,7 @@ public class UsersServiceTests
     }
 
     [Fact]
-    public void DeleteUser_ExistsUserId_DeleteSucess()
+    public void DeleteUser_ExistsUserId_DeleteSuccess()
     {
         var userId = Guid.NewGuid();
         var user = new User { Id = userId };
@@ -144,17 +145,93 @@ public class UsersServiceTests
     }
 
     [Fact]
-    public void AddUser_NonExistsUserEmail_AddSucess()
+    public void AddUser_NonExistsUserEmail_AddSuccess()
     {
         var email = "yasha@lava.com";
         var createModel = new CreateUserModel { Email = email };
         var id = Guid.NewGuid();
         var user = new User { Id = id, Email = email };
 
-        _usersRepositoryMock.Setup(t => t.AddUser(user)).Returns(id);
+        _usersRepositoryMock.Setup(t => t.AddUser(It.Is<User>(t => t.Email == email))).Returns(id);
 
         var userId = _sut.AddUser(createModel);
 
-        _usersRepositoryMock.Verify(t => t.AddUser(It.IsAny<User>()));
+        _usersRepositoryMock.Verify(t => t.AddUser(It.Is<User>(t => t.Email == email)));
+        Assert.Equal(id, userId);
     }
+
+    [Fact]
+    public void AddBookToUser_NonExistsUserId_EntityNotFoundExceprionTrown()
+    {
+        var userId = Guid.NewGuid();
+        var bookId = Guid.NewGuid();
+
+        var msg = $"User {userId} not found";
+
+        var ex = Assert.Throws<EntityNotFoundException>(() => _sut.AddBookToUser(userId, bookId));
+
+        Assert.Equal(msg, ex.Message);
+    }
+
+    [Fact]
+    public void AddBookToUser_NonExistsBookid_EntityNotFoundExceprionTrown()
+    {
+        var userId = Guid.NewGuid();
+        var bookId = Guid.NewGuid();
+        var msg = $"Book {bookId} not found";
+        var user = new User { Id = userId };
+
+        _usersRepositoryMock.Setup(t => t.GetUserFullProfileById(userId)).Returns(user);
+
+        var ex = Assert.Throws<EntityNotFoundException>(() => _sut.AddBookToUser(userId, bookId));
+
+        Assert.Equal(msg, ex.Message);
+    }
+
+    [Fact]
+    public void AddBookToUser_ExistsUserIdExistsBookId_AddSuccess()
+    {
+        var userId = Guid.NewGuid();
+        var bookId = Guid.NewGuid();
+        var msg = $"Book {bookId} not found";
+        var user = new User { Id = userId };
+        var book = new Book { Id = bookId };    
+
+        _usersRepositoryMock.Setup(t => t.GetUserFullProfileById(userId)).Returns(user);
+        _booksRepositoryMock.Setup(t => t.GetBookById(bookId)).Returns(book);
+
+        _sut.AddBookToUser(userId, bookId);
+
+        _usersRepositoryMock.Verify(t => t.AddBookToUser(book, user));
+    }
+
+    [Fact]
+    public void UpdateUser_NonExistsUserId_EntityNotFoundExceprionTrown()
+    {
+        var userId = Guid.NewGuid();
+        var updateUserModel = new UpdateUserModel { };
+        var msg = $"User {userId} not found";
+
+        var ex = Assert.Throws<EntityNotFoundException>(() => _sut.UpdateUser(userId, updateUserModel));
+
+        Assert.Equal(msg, ex.Message);
+    }
+
+    [Fact]
+    public void UpdateUser_ExistsUserIdExistsUserEmailConflictUpdateUserEmail_EntitConflictExceprionTrown()
+    {
+        var userId = Guid.NewGuid();
+        var email = "yasha@lava.com";
+        var updateUserModel = new UpdateUserModel { Email =email };
+        var user = new User { Id = userId, Email = "" };
+        var msg = $"{email} already exists.";
+
+        _usersRepositoryMock.Setup(t => t.GetUserById(userId)).Returns(user);
+        _usersRepositoryMock.Setup(t => t.GetUserByEmail(email)).Returns(user);
+
+        var ex = Assert.Throws<EntityConflictException>(() => _sut.UpdateUser(userId, updateUserModel));
+
+        Assert.Equal(msg, ex.Message);
+    }
+
 }

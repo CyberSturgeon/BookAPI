@@ -27,7 +27,7 @@ public class BooksController(
     [HttpGet("{id}"), AllowAnonymous]
     public ActionResult<BookFullResponse> GetBookById([FromRoute] Guid id)
     {
-        var book = mapper.Map<BookFullModel>(booksService.GetBookById(id));
+        var book = mapper.Map<BookFullResponse>(booksService.GetBookById(id));
         return Ok(book);
     }
 

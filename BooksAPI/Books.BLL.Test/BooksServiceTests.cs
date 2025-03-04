@@ -59,15 +59,16 @@ public class BooksServiceTests
         var userId = Guid.NewGuid();
         var bookId = Guid.NewGuid();
         var user = new User { Id = userId };
-        var book = new Book { Users = new List<User> { user } };
         var bookModel = new CreateBookModel { UserId = userId };
+        var book = _mapper.Map<Book>(bookModel);
 
         _usersRepositoryMock.Setup(t => t.GetUserById(userId)).Returns(user);
-        _booksRepositoryMock.Setup(t => t.AddBook(book, user)).Returns(bookId);
+        _booksRepositoryMock.Setup(t => t.AddBook(It.IsAny<Book>(), It.IsAny<User>())).Returns(bookId);
 
         var addedBookId = _sut.AddBook(bookModel);
 
         _booksRepositoryMock.Verify(t => t.AddBook(It.IsAny<Book>(), It.IsAny<User>()), Times.Once);
+        Assert.Equal(bookId, addedBookId);
     }
 
     [Fact]
@@ -137,14 +138,14 @@ public class BooksServiceTests
         var bookId = Guid.NewGuid();
         var bookModel = new UpdateBookModel { Author = "test" };
         var book = new Book { Id = bookId };
-        var newBook = _mapper.Map<Book>(bookModel);
 
         _booksRepositoryMock.Setup(t => t.GetBookById(bookId)).Returns(book);
 
 
         _sut.UpdateBook(bookId, bookModel);
 
-        _booksRepositoryMock.Verify(t => t.UpdateBook(It.IsAny<Book>(), It.IsAny<Book>()), Times.Once);
+        _booksRepositoryMock.Verify(t
+                => t.UpdateBook(book, It.Is<Book>(nb => nb.Author == bookModel.Author)), Times.Once);
     }
 
     [Fact]

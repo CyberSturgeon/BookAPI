@@ -10,7 +10,7 @@ public class User
 
     public string Password { get; set; }
 
-    public ICollection<Book>? Books { get; set; }
+    public ICollection<Book>? Books { get; set; } = [];
 
-    public ICollection<TradeRequest> Trades { get; set; }
+    public ICollection<TradeRequest> Trades { get; set; } = [];
 }
